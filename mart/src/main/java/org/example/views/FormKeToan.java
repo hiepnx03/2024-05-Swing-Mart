@@ -4,11 +4,18 @@
  */
 package org.example.views;
 
+import org.example.connect.MyConnection;
 import org.example.controllers.SalaryReportController;
 import org.example.controllers.SalesReceiptController;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  *
@@ -56,6 +63,13 @@ public class FormKeToan extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         TableBaoCaoDoanhThu = new javax.swing.JTable();
+        btnSapXepTheoSoLuongDaBan = new javax.swing.JButton();
+        btnSapXepTheoGia = new javax.swing.JButton();
+        btnSapXepTheoTenSanPham = new javax.swing.JButton();
+        ComboBoxTongDoanhThu = new javax.swing.JComboBox<>();
+        lbDoanhThu = new javax.swing.JLabel();
+        btnXoa = new javax.swing.JButton();
+        btnDangXuat = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,7 +94,7 @@ public class FormKeToan extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,6 +106,7 @@ public class FormKeToan extends javax.swing.JFrame {
 
         Main.addTab("Báo cáo lương", jPanel2);
 
+        TableBaoCaoDoanhThu.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         TableBaoCaoDoanhThu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -103,45 +118,133 @@ public class FormKeToan extends javax.swing.JFrame {
 
             }
         ));
+        TableBaoCaoDoanhThu.setRowHeight(40);
+        TableBaoCaoDoanhThu.setSelectionBackground(new java.awt.Color(232, 57, 95));
+        TableBaoCaoDoanhThu.setShowHorizontalLines(true);
+        TableBaoCaoDoanhThu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableBaoCaoDoanhThuMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(TableBaoCaoDoanhThu);
+
+        btnSapXepTheoSoLuongDaBan.setText("Sắp Xếp Theo Số Lượng Đã Bán");
+        btnSapXepTheoSoLuongDaBan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSapXepTheoSoLuongDaBanActionPerformed(evt);
+            }
+        });
+
+        btnSapXepTheoGia.setText("Sắp Xếp Theo Giá");
+        btnSapXepTheoGia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSapXepTheoGiaActionPerformed(evt);
+            }
+        });
+
+        btnSapXepTheoTenSanPham.setText("Sắp Xếp Theo Tên Sản phẩm");
+        btnSapXepTheoTenSanPham.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSapXepTheoTenSanPhamActionPerformed(evt);
+            }
+        });
+
+        ComboBoxTongDoanhThu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tổng Doanh Thu Siêu Thị", "Tổng Doanh Thu Theo Ngày Hiện Tại", "Tổng Doanh Thu Theo Tháng Hiện Tại", "Tổng Doanh Thu Theo Năm Hiện Tại" }));
+        ComboBoxTongDoanhThu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxTongDoanhThuActionPerformed(evt);
+            }
+        });
+
+        lbDoanhThu.setText("DoanhThu");
+
+        btnXoa.setText("Xóa");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(btnSapXepTheoGia)
+                        .addGap(0, 755, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(btnSapXepTheoSoLuongDaBan)
+                        .addGap(121, 121, 121)
+                        .addComponent(ComboBoxTongDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lbDoanhThu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(btnSapXepTheoTenSanPham)
+                .addGap(126, 126, 126)
+                .addComponent(btnXoa)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSapXepTheoSoLuongDaBan)
+                    .addComponent(ComboBoxTongDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnSapXepTheoGia)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSapXepTheoTenSanPham)
+                    .addComponent(btnXoa))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         Main.addTab("Báo cáo doanh thu", jPanel3);
+
+        btnDangXuat.setBackground(new java.awt.Color(220, 53, 69));
+        btnDangXuat.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnDangXuat.setForeground(new java.awt.Color(255, 255, 255));
+        btnDangXuat.setText("Đăng Xuất");
+        btnDangXuat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDangXuatActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(96, 96, 96)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(Main)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDangXuat))
+                    .addComponent(Main))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(32, 32, 32)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(32, 32, 32))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnDangXuat)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addComponent(Main)
                 .addContainerGap())
         );
@@ -165,6 +268,281 @@ public class FormKeToan extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSapXepTheoSoLuongDaBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSapXepTheoSoLuongDaBanActionPerformed
+        // TODO add your handling code here:
+        // Sắp xếp bảng theo cột "SoldQuantity" (số lượng đã bán)
+        DefaultTableModel model = (DefaultTableModel) TableBaoCaoDoanhThu.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        TableBaoCaoDoanhThu.setRowSorter(sorter);
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+        sortKeys.add(new RowSorter.SortKey(9, SortOrder.DESCENDING)); // 9 là chỉ số cột "SoldQuantity"
+        sorter.setSortKeys(sortKeys);
+        sorter.sort();
+    }//GEN-LAST:event_btnSapXepTheoSoLuongDaBanActionPerformed
+
+    private void btnSapXepTheoGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSapXepTheoGiaActionPerformed
+        // Sắp xếp bảng theo cột "TotalAmount" (giá)
+        DefaultTableModel model = (DefaultTableModel) TableBaoCaoDoanhThu.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        TableBaoCaoDoanhThu.setRowSorter(sorter);
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+        sortKeys.add(new RowSorter.SortKey(2, SortOrder.DESCENDING)); // 2 là chỉ số cột "TotalAmount"
+        sorter.setSortKeys(sortKeys);
+        sorter.setComparator(2, new Comparator<Double>() {
+            @Override
+            public int compare(Double o1, Double o2) {
+                return o1.compareTo(o2);
+            }
+        });
+        sorter.sort();
+    }//GEN-LAST:event_btnSapXepTheoGiaActionPerformed
+
+    private void btnSapXepTheoTenSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSapXepTheoTenSanPhamActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) TableBaoCaoDoanhThu.getModel();
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        TableBaoCaoDoanhThu.setRowSorter(sorter);
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+        sortKeys.add(new RowSorter.SortKey(8, SortOrder.ASCENDING)); // 8 là chỉ số cột "ProductName"
+        sorter.setSortKeys(sortKeys);
+        sorter.sort();
+    }//GEN-LAST:event_btnSapXepTheoTenSanPhamActionPerformed
+
+    private void ComboBoxTongDoanhThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxTongDoanhThuActionPerformed
+        // TODO: Xử lý sự kiện khi lựa chọn từ combobox
+        String selectedOption = (String) ComboBoxTongDoanhThu.getSelectedItem();
+        switch (selectedOption) {
+            case "Tổng Doanh Thu Siêu Thị":
+                hienThiTongDoanhThuCuaSieuThi();
+                break;
+            case "Tổng Doanh Thu Theo Ngày Hiện Tại":
+                hienThiTongDoanhThuTheoNgayHienTai();
+                break;
+            case "Tổng Doanh Thu Theo Tháng Hiện Tại":
+                hienThiTongDoanhThuTheoThangHienTai();
+                break;
+            case "Tổng Doanh Thu Theo Năm Hiện Tại":
+                hienThiTongDoanhThuTheoNamHienTai();
+                break;
+            default:
+                // Xử lý nếu không có lựa chọn phù hợp
+                break;
+        }
+    }//GEN-LAST:event_ComboBoxTongDoanhThuActionPerformed
+
+    private void updateTotalRevenueLabel(String message) {
+        lbDoanhThu.setText(message);
+    }
+
+    private void hienThiTongDoanhThuCuaSieuThi() {
+        // Your existing code to fetch total revenue
+        try {
+            // Tạo truy vấn SQL để tính tổng doanh thu
+            String query = "SELECT SUM(TotalAmount) AS TongDoanhThu FROM SalesReceipts";
+
+            // Thực thi truy vấn
+            Statement statement = MyConnection.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            // Kiểm tra nếu có kết quả
+            if (resultSet.next()) {
+                // Lấy tổng doanh thu từ kết quả
+                double tongDoanhThu = resultSet.getDouble("TongDoanhThu");
+                // Update the total revenue label
+                updateTotalRevenueLabel("Tổng doanh thu của siêu thị là: "+tongDoanhThu);
+
+                System.out.println("Tổng doanh thu của siêu thị là: "+tongDoanhThu);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void hienThiTongDoanhThuTheoNgayHienTai() {
+        try {
+            // Lấy ngày hiện tại
+            LocalDate currentDate = LocalDate.now();
+
+            // Tạo truy vấn SQL để tính tổng doanh thu theo ngày hiện tại
+            String query = "SELECT SUM(TotalAmount) AS TongDoanhThu FROM SalesReceipts WHERE SaleDate = ?";
+
+            // Thực thi truy vấn với tham số là ngày hiện tại
+            try (Connection conn = MyConnection.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setDate(1, java.sql.Date.valueOf(currentDate));
+                ResultSet resultSet = stmt.executeQuery();
+
+                // Kiểm tra nếu có kết quả
+                if (resultSet.next()) {
+                    // Lấy tổng doanh thu từ kết quả
+                    double tongDoanhThu = resultSet.getDouble("TongDoanhThu");
+
+                    // Tạo bảng để hiển thị tổng doanh thu
+                    DefaultTableModel model = new DefaultTableModel(
+                            new String[]{"Tổng Doanh Thu"}, 0);
+                    model.addRow(new Object[]{tongDoanhThu});
+                    System.out.println("Tổng doanh thu của ngày hiện tại là: "+tongDoanhThu);
+                    updateTotalRevenueLabel("Tổng doanh thu của ngày hiện tại là: "+tongDoanhThu);
+
+                    // Hiển thị bảng
+                    TableBaoCaoDoanhThu.setModel(tableModel);
+
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void hienThiTongDoanhThuTheoThangHienTai() {
+        try {
+            // Lấy tháng và năm hiện tại
+            LocalDate currentDate = LocalDate.now();
+            int currentMonth = currentDate.getMonthValue();
+            int currentYear = currentDate.getYear();
+
+            // Tạo truy vấn SQL để tính tổng doanh thu theo tháng và năm hiện tại
+            String query = "SELECT SUM(TotalAmount) AS TongDoanhThu FROM SalesReceipts WHERE MONTH(SaleDate) = ? AND YEAR(SaleDate) = ?";
+
+            // Thực thi truy vấn với tham số là tháng và năm hiện tại
+            try (Connection conn = MyConnection.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, currentMonth);
+                stmt.setInt(2, currentYear);
+                ResultSet resultSet = stmt.executeQuery();
+
+                // Kiểm tra nếu có kết quả
+                if (resultSet.next()) {
+                    // Lấy tổng doanh thu từ kết quả
+                    double tongDoanhThu = resultSet.getDouble("TongDoanhThu");
+
+                    // Tạo bảng để hiển thị tổng doanh thu
+                    DefaultTableModel model = new DefaultTableModel(
+                            new String[]{"Tổng Doanh Thu"}, 0);
+                    model.addRow(new Object[]{tongDoanhThu});
+                    System.out.println("Tổng doanh thu của tháng hiện tại là: "+tongDoanhThu);
+                    updateTotalRevenueLabel("Tổng doanh thu của tháng hiện tại là: "+tongDoanhThu);
+                    // Hiển thị bảng
+                    TableBaoCaoDoanhThu.setModel(tableModel);
+
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void hienThiTongDoanhThuTheoNamHienTai() {
+        try {
+            // Lấy năm hiện tại
+            int currentYear = LocalDate.now().getYear();
+
+            // Tạo truy vấn SQL để tính tổng doanh thu theo năm hiện tại
+            String query = "SELECT SUM(TotalAmount) AS TongDoanhThu FROM SalesReceipts WHERE YEAR(SaleDate) = ?";
+
+            // Thực thi truy vấn với tham số năm hiện tại
+            try (Connection conn = MyConnection.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, currentYear);
+                ResultSet resultSet = stmt.executeQuery();
+
+                // Kiểm tra nếu có kết quả
+                if (resultSet.next()) {
+                    // Lấy tổng doanh thu từ kết quả
+                    double tongDoanhThu = resultSet.getDouble("TongDoanhThu");
+
+                    // Tạo bảng để hiển thị tổng doanh thu
+                    DefaultTableModel model = new DefaultTableModel(
+                            new String[]{"Tổng Doanh Thu"}, 0);
+                    model.addRow(new Object[]{tongDoanhThu});
+                    System.out.println("Tổng doanh thu của năm hiện tại là: "+tongDoanhThu);
+                    // Hiển thị bảng
+                    updateTotalRevenueLabel("Tổng doanh thu của năm hiện tại là: "+tongDoanhThu);
+
+                    TableBaoCaoDoanhThu.setModel(tableModel);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void btnDangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangXuatActionPerformed
+        // TODO add your handling code here:
+        FormDangNhap loginForm = new FormDangNhap(); // Assuming LoginForm is your login screen
+        loginForm.setVisible(true);
+        this.dispose(); // Close the current window
+    }//GEN-LAST:event_btnDangXuatActionPerformed
+
+    private void TableBaoCaoDoanhThuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableBaoCaoDoanhThuMouseClicked
+        // TODO add your handling code here:
+        int selectedRow = TableBaoCaoDoanhThu.getSelectedRow();
+        if (selectedRow != -1) {
+            // Lấy giá trị SalesReceiptID từ hàng được chọn
+            int salesReceiptID = (int) TableBaoCaoDoanhThu.getValueAt(selectedRow, 0);
+
+            // Hiển thị hộp thoại xác nhận
+            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this sales report?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Gọi phương thức xóa báo cáo doanh thu từ controller
+                SalaryReportController controller = new SalaryReportController();
+                boolean success = controller.deleteSalesReport(salesReceiptID);
+
+                if (success) {
+                    // Hiển thị thông báo xóa thành công
+                    JOptionPane.showMessageDialog(this, "Sales report deleted successfully");
+
+                    // Refresh bảng báo cáo doanh thu
+                    DefaultTableModel model = controller.getAllDoanhThu();
+                    TableBaoCaoDoanhThu.setModel(model);
+                } else {
+                    // Hiển thị thông báo lỗi
+                    JOptionPane.showMessageDialog(this, "Failed to delete sales report", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a sales report to delete");
+        }
+    }//GEN-LAST:event_TableBaoCaoDoanhThuMouseClicked
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+        // Lấy chỉ mục hàng đã chọn trong bảng
+        int selectedRow = TableBaoCaoDoanhThu.getSelectedRow();
+
+        // Kiểm tra xem hàng đã chọn có hợp lệ không
+        if (selectedRow != -1) {
+            // Lấy giá trị của cột SalesReceiptID từ hàng đã chọn
+            int salesReceiptID = (int) TableBaoCaoDoanhThu.getValueAt(selectedRow, 0);
+
+            // Xác nhận xóa
+            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this sales report?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Gọi phương thức xóa báo cáo doanh thu từ controller
+                boolean success = salaryReportController.deleteSalesReport(salesReceiptID);
+
+                if (success) {
+                    // Hiển thị thông báo thành công
+                    JOptionPane.showMessageDialog(this, "Sales report deleted successfully");
+
+                    // Cập nhật bảng báo cáo doanh thu
+                    showBaoCaoDoanhThu();
+                } else {
+                    // Hiển thị thông báo lỗi nếu xóa không thành công
+                    JOptionPane.showMessageDialog(this, "Failed to delete sales report", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            // Hiển thị thông báo yêu cầu chọn hàng để xóa
+            JOptionPane.showMessageDialog(this, "Please select a sales report to delete");
+        }
+    }//GEN-LAST:event_btnXoaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -202,14 +580,21 @@ public class FormKeToan extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> ComboBoxTongDoanhThu;
     private javax.swing.JTabbedPane Main;
     private javax.swing.JTable TableBaoCaoDoanhThu;
     private javax.swing.JTable TableBaoCaoLuong;
+    private javax.swing.JButton btnDangXuat;
+    private javax.swing.JButton btnSapXepTheoGia;
+    private javax.swing.JButton btnSapXepTheoSoLuongDaBan;
+    private javax.swing.JButton btnSapXepTheoTenSanPham;
+    private javax.swing.JButton btnXoa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lbDoanhThu;
     // End of variables declaration//GEN-END:variables
 }

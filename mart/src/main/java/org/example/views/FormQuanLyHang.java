@@ -57,9 +57,7 @@ public class FormQuanLyHang extends javax.swing.JFrame {
         productController = new ProductController();
         supplierController = new SupplierController();
         // Load data
-        showPhieuBanHang();
-        showPhieuNhapHang();
-        showDanhMucSanPham();
+
         showSanPham();
         showNhaCungCap();
         loadSupplier();
@@ -110,7 +108,7 @@ public class FormQuanLyHang extends javax.swing.JFrame {
         model.fireTableDataChanged();
         updateImageColumn();
     }
-    
+
 
     // Cập nhật hiển thị của ảnh trong bảng khi có thay đổi dữ liệu
     public void updateImageColumn() {
@@ -164,24 +162,10 @@ public class FormQuanLyHang extends javax.swing.JFrame {
 
     }
 
-    private void showDanhMucSanPham() {
-        productController = new ProductController();
-        tableModel = productController.getAllProducts();
-        TableDanhMucSanPham.setModel(tableModel);
-    }
+ 
 
 
-    private void showPhieuBanHang() {
-        salesReceiptController = new SalesReceiptController();
-        tableModel = salesReceiptController.getAllPhieuBanHang();
-        TablePhieuBanHang.setModel(tableModel);
-    }
-
-    private void showPhieuNhapHang() {
-        inventoryReceiptController = new InventoryReceiptController();
-        tableModel = inventoryReceiptController.getAllInventoryReceipts();
-        TablePhieuNhapHang.setModel(tableModel);
-    }
+   
 
 
     /**
@@ -196,15 +180,6 @@ public class FormQuanLyHang extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        TablePhieuBanHang = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        TablePhieuNhapHang = new javax.swing.JTable();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        TableDanhMucSanPham = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         TableSanPham = new javax.swing.JTable();
@@ -251,100 +226,9 @@ public class FormQuanLyHang extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText("Quản Lý Hàng");
-
-        TablePhieuBanHang.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane1.setViewportView(TablePhieuBanHang);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 831, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Phiếu bán hàng", jPanel2);
-
-        TablePhieuNhapHang.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane2.setViewportView(TablePhieuNhapHang);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 819, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(268, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Phiếu nhập hàng", jPanel3);
-
-        TableDanhMucSanPham.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane3.setViewportView(TableDanhMucSanPham);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 819, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(268, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Quản lý danh mục sản phẩm", jPanel4);
 
         TableSanPham.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         TableSanPham.setModel(new javax.swing.table.DefaultTableModel(
@@ -413,6 +297,7 @@ public class FormQuanLyHang extends javax.swing.JFrame {
             }
         });
 
+        btnChonAnhSanPham.setBackground(new java.awt.Color(102, 153, 255));
         btnChonAnhSanPham.setText("Chọn ảnh");
         btnChonAnhSanPham.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -539,7 +424,6 @@ public class FormQuanLyHang extends javax.swing.JFrame {
                                 .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnChonAnhSanPham)
                                     .addGroup(jPanel5Layout.createSequentialGroup()
                                         .addComponent(btnThemSanPham)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -547,7 +431,8 @@ public class FormQuanLyHang extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(btnXoaSanPham)
                                         .addGap(18, 18, 18)
-                                        .addComponent(btnLamTrong)))
+                                        .addComponent(btnLamTrong))
+                                    .addComponent(btnChonAnhSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(LabelAnhSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -563,12 +448,11 @@ public class FormQuanLyHang extends javax.swing.JFrame {
                     .addComponent(LabelAnhSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnChonAnhSanPham))
+                            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(41, 41, 41)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnChonAnhSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnThemSanPham)
                             .addComponent(btnSuaSanPham)
@@ -635,7 +519,7 @@ public class FormQuanLyHang extends javax.swing.JFrame {
             }
         });
 
-        btnSuaNhaCungCap.setBackground(new java.awt.Color(108, 117, 125));
+        btnSuaNhaCungCap.setBackground(new java.awt.Color(0, 123, 255));
         btnSuaNhaCungCap.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnSuaNhaCungCap.setForeground(new java.awt.Color(255, 255, 255));
         btnSuaNhaCungCap.setText("Sửa");
@@ -746,7 +630,7 @@ public class FormQuanLyHang extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnThemNhaCungCap)
                         .addComponent(btnSuaNhaCungCap)))
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addContainerGap(125, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Nhà cung cấp", jPanel6);
@@ -802,58 +686,60 @@ public class FormQuanLyHang extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnThemNhaCungCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemNhaCungCapActionPerformed
+    private void btnDangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangXuatActionPerformed
         // TODO add your handling code here:
-        // Lấy dữ liệu từ các trường nhập
-        String supplierName = tbSupplierName.getText();
-        String contactInfo = tbContactInfo.getText();
-        String address = tbAddress.getText();
-        String phone = tbPhone.getText();
-        String email = tbEmail.getText();
-        int createdBy = 1; // Thay đổi theo user hiện tại
-        int updatedBy = 1; // Thay đổi theo user hiện tại
+        FormDangNhap loginForm = new FormDangNhap(); // Assuming LoginForm is your login screen
+        loginForm.setVisible(true);
+        this.dispose(); // Close the current window
+    }//GEN-LAST:event_btnDangXuatActionPerformed
 
-        // Tạo đối tượng Supplier
-        Supplier supplier = new Supplier();
-        supplier.setSupplierName(supplierName);
-        supplier.setContactInfo(contactInfo);
-        supplier.setAddress(address);
-        supplier.setPhone(phone);
-        supplier.setEmail(email);
-        supplier.setCreatedBy(createdBy);
-        supplier.setUpdatedBy(updatedBy);
+    private void btnLamRongNhaCungCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamRongNhaCungCapActionPerformed
+        // TODO add your handling code here:
+        // Xóa nội dung của tất cả các trường nhập
+        tbSupplierID.setText("");
+        tbSupplierName.setText("");
+        tbContactInfo.setText("");
+        tbAddress.setText("");
+        tbPhone.setText("");
+        tbEmail.setText("");
+    }//GEN-LAST:event_btnLamRongNhaCungCapActionPerformed
 
-        // Gọi phương thức addSupplier từ SupplierController
-        SupplierController supplierController = new SupplierController();
-        boolean success = supplierController.addSupplier(supplier);
+    private void btnXoaNhaCungCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaNhaCungCapActionPerformed
+        // TODO add your handling code here:
+        try {
+            int supplierID = Integer.parseInt(tbSupplierID.getText());
 
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thành công!");
-            // Cập nhật lại bảng dữ liệu
-            showPhieuBanHang();
-            showPhieuNhapHang();
-            showDanhMucSanPham();
-            showSanPham();
-            showNhaCungCap();
-            loadSupplier();
-        } else {
-            JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thất bại!");
+            // Gọi phương thức deleteSupplier từ SupplierController
+            SupplierController supplierController = new SupplierController();
+            boolean success = supplierController.deleteSupplier(supplierID);
+
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Xóa nhà cung cấp thành công!");
+                // Cập nhật lại bảng dữ liệu
+
+                showSanPham();
+                showNhaCungCap();
+                loadSupplier();
+            } else {
+                JOptionPane.showMessageDialog(this, "Không thể xóa nhà cung cấp vì nhà cung cấp có sản phẩm liên quan !");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng dữ liệu cho SupplierID.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi xóa nhà cung cấp.");
         }
-    }//GEN-LAST:event_btnThemNhaCungCapActionPerformed
-
-    private void tbSupplierIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbSupplierIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbSupplierIDActionPerformed
-
-    private void tbSupplierNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbSupplierNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbSupplierNameActionPerformed
+      
+        showSanPham();
+        showNhaCungCap();
+        loadSupplier();
+    }//GEN-LAST:event_btnXoaNhaCungCapActionPerformed
 
     private void btnSuaNhaCungCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaNhaCungCapActionPerformed
         // TODO add your handling code here:
@@ -884,9 +770,7 @@ public class FormQuanLyHang extends javax.swing.JFrame {
             if (success) {
                 JOptionPane.showMessageDialog(this, "Cập nhật nhà cung cấp thành công!");
                 // Cập nhật lại bảng dữ liệu
-                showPhieuBanHang();
-                showPhieuNhapHang();
-                showDanhMucSanPham();
+
                 showSanPham();
                 showNhaCungCap();
                 loadSupplier();
@@ -901,51 +785,49 @@ public class FormQuanLyHang extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSuaNhaCungCapActionPerformed
 
-    private void btnXoaNhaCungCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaNhaCungCapActionPerformed
+    private void btnThemNhaCungCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemNhaCungCapActionPerformed
         // TODO add your handling code here:
-        try {
-            int supplierID = Integer.parseInt(tbSupplierID.getText());
+        // Lấy dữ liệu từ các trường nhập
+        String supplierName = tbSupplierName.getText();
+        String contactInfo = tbContactInfo.getText();
+        String address = tbAddress.getText();
+        String phone = tbPhone.getText();
+        String email = tbEmail.getText();
+        int createdBy = 1; // Thay đổi theo user hiện tại
+        int updatedBy = 1; // Thay đổi theo user hiện tại
 
-            // Gọi phương thức deleteSupplier từ SupplierController
-            SupplierController supplierController = new SupplierController();
-            boolean success = supplierController.deleteSupplier(supplierID);
+        // Tạo đối tượng Supplier
+        Supplier supplier = new Supplier();
+        supplier.setSupplierName(supplierName);
+        supplier.setContactInfo(contactInfo);
+        supplier.setAddress(address);
+        supplier.setPhone(phone);
+        supplier.setEmail(email);
+        supplier.setCreatedBy(createdBy);
+        supplier.setUpdatedBy(updatedBy);
 
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Xóa nhà cung cấp thành công!");
-                // Cập nhật lại bảng dữ liệu
-                showPhieuBanHang();
-                showPhieuNhapHang();
-                showDanhMucSanPham();
-                showSanPham();
-                showNhaCungCap();
-                loadSupplier();
-            } else {
-                JOptionPane.showMessageDialog(this, "Không thể xóa nhà cung cấp vì nhà cung cấp có sản phẩm liên quan !");
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng dữ liệu cho SupplierID.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi xóa nhà cung cấp.");
+        // Gọi phương thức addSupplier từ SupplierController
+        SupplierController supplierController = new SupplierController();
+        boolean success = supplierController.addSupplier(supplier);
+
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thành công!");
+
+            showSanPham();
+            showNhaCungCap();
+            loadSupplier();
+        } else {
+            JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thất bại!");
         }
-        showPhieuBanHang();
-        showPhieuNhapHang();
-        showDanhMucSanPham();
-        showSanPham();
-        showNhaCungCap();
-        loadSupplier();
-    }//GEN-LAST:event_btnXoaNhaCungCapActionPerformed
+    }//GEN-LAST:event_btnThemNhaCungCapActionPerformed
 
-    private void btnLamRongNhaCungCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamRongNhaCungCapActionPerformed
+    private void tbSupplierNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbSupplierNameActionPerformed
         // TODO add your handling code here:
-        // Xóa nội dung của tất cả các trường nhập
-        tbSupplierID.setText("");
-        tbSupplierName.setText("");
-        tbContactInfo.setText("");
-        tbAddress.setText("");
-        tbPhone.setText("");
-        tbEmail.setText("");
-    }//GEN-LAST:event_btnLamRongNhaCungCapActionPerformed
+    }//GEN-LAST:event_tbSupplierNameActionPerformed
+
+    private void tbSupplierIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbSupplierIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbSupplierIDActionPerformed
 
     private void TableNhaCungCapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableNhaCungCapMouseClicked
         // TODO add your handling code here:
@@ -976,169 +858,6 @@ public class FormQuanLyHang extends javax.swing.JFrame {
     private void tbDonGiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbDonGiaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tbDonGiaActionPerformed
-
-    private void btnThemSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemSanPhamActionPerformed
-        // Lấy thông tin về sản phẩm từ các trường nhập liệu trên giao diện
-        String productName = tbTenSanPham.getText();
-        String category = tbDanhMuc.getText();
-        int stockQuantity = Integer.parseInt(tbSoLuong.getText());
-        double unitPrice = Double.parseDouble(tbDonGia.getText());
-
-        // Lấy thông tin về nhà cung cấp từ combobox hoặc trường nhập liệu tương ứng
-        String supplierName = (String) ComboBoxNhaCungCap.getSelectedItem(); // Lấy tên nhà cung cấp từ combobox
-
-        // Lấy thông tin về hình ảnh sản phẩm từ LabelAnhSanPham
-        String imageUrl = LabelAnhSanPham.getText();
-
-        // Lấy ID của nhà cung cấp từ tên nhà cung cấp
-        SupplierController supplierController = new SupplierController();
-        Supplier supplier = supplierController.getSupplierByName(supplierName);
-        if (supplier == null) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin về nhà cung cấp.");
-            return;
-        }
-        int supplierID = supplier.getSupplierID();
-
-        // Tạo một đối tượng ProductImage từ đường dẫn của hình ảnh
-        ProductImage productImage = new ProductImage();
-        productImage.setImageUrl(imageUrl);
-
-        // Tạo một đối tượng Product từ thông tin vừa lấy được
-        Product product = new Product();
-        product.setProductName(productName);
-        product.setCategory(category);
-        product.setStockQuantity(stockQuantity);
-        product.setUnitPrice(unitPrice);
-
-        // Sử dụng giá trị loggedInUserID đã được lưu trong lớp FormDangNhap
-        int userID = loggedInUserID;
-
-        if (userID == 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập trước khi thực hiện thêm sản phẩm." + loggedInUserID);
-            return;
-        }
-
-        // Gọi phương thức addProduct trong ProductController để thêm sản phẩm và hình ảnh vào cơ sở dữ liệu
-        ProductController productController = new ProductController();
-        boolean success = productController.addProduct(product, productImage, supplierID, userID);
-
-        // Kiểm tra xem việc thêm sản phẩm có thành công không và hiển thị thông báo tương ứng
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Sản phẩm đã được thêm thành công!");
-            showPhieuBanHang();
-            showPhieuNhapHang();
-            showDanhMucSanPham();
-            showSanPham();
-            showNhaCungCap();
-            refreshTable();
-        } else {
-            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi thêm sản phẩm!");
-        }
-    }//GEN-LAST:event_btnThemSanPhamActionPerformed
-
-    private void btnSuaSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaSanPhamActionPerformed
-        // Lấy ID sản phẩm cần sửa từ bảng
-        int selectedRow = TableSanPham.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để sửa.");
-            return;
-        }
-        int productID = (int) TableSanPham.getValueAt(selectedRow, 0); // Assuming productID is in the first column
-
-        // Lấy thông tin mới của sản phẩm từ các trường nhập liệu
-        String productName = tbTenSanPham.getText();
-        String category = tbDanhMuc.getText();
-        int stockQuantity = Integer.parseInt(tbSoLuong.getText());
-        double unitPrice = Double.parseDouble(tbDonGia.getText());
-        String supplierName = (String) ComboBoxNhaCungCap.getSelectedItem();
-        String imageUrl = LabelAnhSanPham.getText();
-
-        // Lấy ID của nhà cung cấp từ tên nhà cung cấp
-        SupplierController supplierController = new SupplierController();
-        Supplier supplier = supplierController.getSupplierByName(supplierName);
-        if (supplier == null) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin về nhà cung cấp.");
-            return;
-        }
-        int supplierID = supplier.getSupplierID();
-
-        // Tạo đối tượng ProductImage từ đường dẫn của hình ảnh
-        ProductImage productImage = new ProductImage();
-        productImage.setImageUrl(imageUrl);
-
-        // Tạo đối tượng Product với thông tin mới
-        Product product = new Product();
-        product.setProductID(productID);
-        product.setProductName(productName);
-        product.setCategory(category);
-        product.setStockQuantity(stockQuantity);
-        product.setUnitPrice(unitPrice);
-
-        // Sử dụng ID người dùng đã đăng nhập
-        int userID = loggedInUserID;
-        if (userID == 0) {
-            JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập trước khi sửa sản phẩm.");
-            return;
-        }
-
-        // Gọi phương thức updateProduct từ ProductController
-        ProductController productController = new ProductController();
-        boolean success = productController.updateProduct(product, productImage, supplierID, userID);
-
-        // Hiển thị thông báo tương ứng
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Sản phẩm đã được cập nhật thành công!");
-            // Cập nhật lại dữ liệu trong bảng
-            showSanPham();
-            showDanhMucSanPham();
-            showNhaCungCap();
-            refreshTable();
-        } else {
-            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi cập nhật sản phẩm!");
-        }
-    }//GEN-LAST:event_btnSuaSanPhamActionPerformed
-
-    private void btnXoaSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaSanPhamActionPerformed
-        // TODO add your handling code here:
-        try {
-            int productID = Integer.parseInt(tbMaSanPham.getText());
-
-            // Gọi phương thức deleteProduct từ ProductController
-            ProductController productController = new ProductController();
-            boolean success = productController.deleteProduct(productID);
-
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Xóa sản phẩm thành công!");
-                // Cập nhật lại bảng dữ liệu
-                showPhieuBanHang();
-                showPhieuNhapHang();
-                showDanhMucSanPham();
-                showSanPham();
-                showNhaCungCap();
-                showSanPham();
-                refreshTable();
-            } else {
-
-                JOptionPane.showMessageDialog(this, "Xóa sản phẩm thất bại!");
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng dữ liệu cho ProductID.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi xóa sản phẩm.");
-        }
-    }//GEN-LAST:event_btnXoaSanPhamActionPerformed
-
-    private void btnLamTrongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamTrongActionPerformed
-        // TODO add your handling code here:
-        // Xóa nội dung trong các trường nhập liệu
-        tbTenSanPham.setText("");
-        tbDanhMuc.setText("");
-        tbSoLuong.setText("");
-        tbDonGia.setText("");
-        ComboBoxNhaCungCap.setSelectedIndex(0);
-        LabelAnhSanPham.setText("");
-    }//GEN-LAST:event_btnLamTrongActionPerformed
 
     private void btnChonAnhSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChonAnhSanPhamActionPerformed
         // Mở hộp thoại để chọn tệp hình ảnh
@@ -1204,6 +923,165 @@ public class FormQuanLyHang extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnChonAnhSanPhamActionPerformed
 
+    private void btnLamTrongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamTrongActionPerformed
+        // TODO add your handling code here:
+        // Xóa nội dung trong các trường nhập liệu
+        tbTenSanPham.setText("");
+        tbDanhMuc.setText("");
+        tbSoLuong.setText("");
+        tbDonGia.setText("");
+        ComboBoxNhaCungCap.setSelectedIndex(0);
+        LabelAnhSanPham.setText("");
+    }//GEN-LAST:event_btnLamTrongActionPerformed
+
+    private void btnXoaSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaSanPhamActionPerformed
+        // TODO add your handling code here:
+        try {
+            int productID = Integer.parseInt(tbMaSanPham.getText());
+
+            // Gọi phương thức deleteProduct từ ProductController
+            ProductController productController = new ProductController();
+            boolean success = productController.deleteProduct(productID);
+
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Xóa sản phẩm thành công!");
+                // Cập nhật lại bảng dữ liệu
+
+                showSanPham();
+                showNhaCungCap();
+                showSanPham();
+                refreshTable();
+            } else {
+
+                JOptionPane.showMessageDialog(this, "Xóa sản phẩm thất bại!");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng dữ liệu cho ProductID.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi xóa sản phẩm.");
+        }
+    }//GEN-LAST:event_btnXoaSanPhamActionPerformed
+
+    private void btnSuaSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaSanPhamActionPerformed
+        // Lấy ID sản phẩm cần sửa từ bảng
+        int selectedRow = TableSanPham.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để sửa.");
+            return;
+        }
+        int productID = (int) TableSanPham.getValueAt(selectedRow, 0); // Assuming productID is in the first column
+
+        // Lấy thông tin mới của sản phẩm từ các trường nhập liệu
+        String productName = tbTenSanPham.getText();
+        String category = tbDanhMuc.getText();
+        int stockQuantity = Integer.parseInt(tbSoLuong.getText());
+        double unitPrice = Double.parseDouble(tbDonGia.getText());
+        String supplierName = (String) ComboBoxNhaCungCap.getSelectedItem();
+        String imageUrl = LabelAnhSanPham.getText();
+
+        // Lấy ID của nhà cung cấp từ tên nhà cung cấp
+        SupplierController supplierController = new SupplierController();
+        Supplier supplier = supplierController.getSupplierByName(supplierName);
+        if (supplier == null) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin về nhà cung cấp.");
+            return;
+        }
+        int supplierID = supplier.getSupplierID();
+
+        // Tạo đối tượng ProductImage từ đường dẫn của hình ảnh
+        ProductImage productImage = new ProductImage();
+        productImage.setImageUrl(imageUrl);
+
+        // Tạo đối tượng Product với thông tin mới
+        Product product = new Product();
+        product.setProductID(productID);
+        product.setProductName(productName);
+        product.setCategory(category);
+        product.setStockQuantity(stockQuantity);
+        product.setUnitPrice(unitPrice);
+
+        // Sử dụng ID người dùng đã đăng nhập
+        int userID = loggedInUserID;
+        if (userID == 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập trước khi sửa sản phẩm.");
+            return;
+        }
+
+        // Gọi phương thức updateProduct từ ProductController
+        ProductController productController = new ProductController();
+        boolean success = productController.updateProduct(product, productImage, supplierID, userID);
+
+        // Hiển thị thông báo tương ứng
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Sản phẩm đã được cập nhật thành công!");
+            // Cập nhật lại dữ liệu trong bảng
+            showSanPham();
+
+            showNhaCungCap();
+            refreshTable();
+        } else {
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi cập nhật sản phẩm!");
+        }
+    }//GEN-LAST:event_btnSuaSanPhamActionPerformed
+
+    private void btnThemSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemSanPhamActionPerformed
+        // Lấy thông tin về sản phẩm từ các trường nhập liệu trên giao diện
+        String productName = tbTenSanPham.getText();
+        String category = tbDanhMuc.getText();
+        int stockQuantity = Integer.parseInt(tbSoLuong.getText());
+        double unitPrice = Double.parseDouble(tbDonGia.getText());
+
+        // Lấy thông tin về nhà cung cấp từ combobox hoặc trường nhập liệu tương ứng
+        String supplierName = (String) ComboBoxNhaCungCap.getSelectedItem(); // Lấy tên nhà cung cấp từ combobox
+
+        // Lấy thông tin về hình ảnh sản phẩm từ LabelAnhSanPham
+        String imageUrl = LabelAnhSanPham.getText();
+
+        // Lấy ID của nhà cung cấp từ tên nhà cung cấp
+        SupplierController supplierController = new SupplierController();
+        Supplier supplier = supplierController.getSupplierByName(supplierName);
+        if (supplier == null) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin về nhà cung cấp.");
+            return;
+        }
+        int supplierID = supplier.getSupplierID();
+
+        // Tạo một đối tượng ProductImage từ đường dẫn của hình ảnh
+        ProductImage productImage = new ProductImage();
+        productImage.setImageUrl(imageUrl);
+
+        // Tạo một đối tượng Product từ thông tin vừa lấy được
+        Product product = new Product();
+        product.setProductName(productName);
+        product.setCategory(category);
+        product.setStockQuantity(stockQuantity);
+        product.setUnitPrice(unitPrice);
+
+        // Sử dụng giá trị loggedInUserID đã được lưu trong lớp FormDangNhap
+        int userID = loggedInUserID;
+
+        if (userID == 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập trước khi thực hiện thêm sản phẩm." + loggedInUserID);
+            return;
+        }
+
+        // Gọi phương thức addProduct trong ProductController để thêm sản phẩm và hình ảnh vào cơ sở dữ liệu
+        ProductController productController = new ProductController();
+        boolean success = productController.addProduct(product, productImage, supplierID, userID);
+
+        // Kiểm tra xem việc thêm sản phẩm có thành công không và hiển thị thông báo tương ứng
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Sản phẩm đã được thêm thành công!");
+
+            showSanPham();
+            showNhaCungCap();
+            refreshTable();
+        } else {
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi thêm sản phẩm!");
+        }
+    }//GEN-LAST:event_btnThemSanPhamActionPerformed
+
     private void TableSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableSanPhamMouseClicked
         int selectedRow = TableSanPham.getSelectedRow();
         if (selectedRow >= 0) {
@@ -1239,13 +1117,6 @@ public class FormQuanLyHang extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_TableSanPhamMouseClicked
-
-    private void btnDangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangXuatActionPerformed
-        // TODO add your handling code here:
-        FormDangNhap loginForm = new FormDangNhap(); // Assuming LoginForm is your login screen
-        loginForm.setVisible(true);
-        this.dispose(); // Close the current window
-    }//GEN-LAST:event_btnDangXuatActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1304,10 +1175,7 @@ public class FormQuanLyHang extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> ComboBoxNhaCungCap;
     private javax.swing.JLabel LabelAnhSanPham;
-    private javax.swing.JTable TableDanhMucSanPham;
     private javax.swing.JTable TableNhaCungCap;
-    private javax.swing.JTable TablePhieuBanHang;
-    private javax.swing.JTable TablePhieuNhapHang;
     private javax.swing.JTable TableSanPham;
     private javax.swing.JButton btnChonAnhSanPham;
     private javax.swing.JButton btnDangXuat;
@@ -1333,16 +1201,10 @@ public class FormQuanLyHang extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;

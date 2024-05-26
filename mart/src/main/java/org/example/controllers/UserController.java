@@ -392,5 +392,52 @@ public class UserController {
     }
 
 
+    public Employee getByEmployeeIDWithUserID(int employeeID, int userID) {
+        Employee employee = null;
+
+        // Tạo truy vấn SQL để lấy thông tin Employee dựa trên EmployeeID và UserID
+        String query = "SELECT * FROM employees WHERE EmployeeID = ? AND CreatedBy = ?";
+
+        try (Connection conn = MyConnection.getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+
+            // Thiết lập giá trị cho các tham số trong truy vấn
+            preparedStatement.setInt(1, employeeID);
+            preparedStatement.setInt(2, userID);
+
+            // Thực thi truy vấn và lấy kết quả
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // Kiểm tra xem có kết quả nào không
+            if (resultSet.next()) {
+                // Tạo một đối tượng Employee từ dữ liệu trong kết quả
+                employee = new Employee();
+                employee.setEmployeeID(resultSet.getInt("EmployeeID"));
+                employee.setFirstName(resultSet.getString("FirstName"));
+                employee.setLastName(resultSet.getString("LastName"));
+                // Các trường thông tin khác của Employee
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return employee; // Trả về đối tượng Employee hoặc null nếu không tìm thấy
+    }
+    public int getEmployeeIDByUserID(int userID) {
+        int employeeID = -1; // Giá trị mặc định nếu không tìm thấy
+
+        String query = "SELECT employeeID FROM users WHERE userID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                employeeID = resultSet.getInt("employeeID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return employeeID;
+    }
 
 }

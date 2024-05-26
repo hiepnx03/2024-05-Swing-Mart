@@ -1,32 +1,38 @@
-//package org.example.controllers;
-//
-//import org.example.models.Attendance;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//public class AttendanceController {
-//
-//    private AttendanceRepository attendanceRepository;
-//
-//    public List<Attendance> getAllAttendances() {
-//        return attendanceRepository.findAll();
-//    }
-//
-//    public Attendance getAttendanceByID(int attendanceID) {
-//        Optional<Attendance> getAttendanceByID = attendanceRepository.findById(attendanceID);
-//        return getAttendanceByID.orElse(null);
-//    }
-//
-//    public void addAttendance(Attendance attendance) {
-//        // Code để thêm một bản ghi chấm công mới vào cơ sở dữ liệu
-//    }
-//
-//    public void updateAttendance(Attendance attendance) {
-//        // Code để cập nhật thông tin của một bản ghi chấm công trong cơ sở dữ liệu
-//    }
-//
-//    public void deleteAttendance(int attendanceID) {
-//        // Code để xóa một bản ghi chấm công khỏi cơ sở dữ liệu dựa trên ID
-//    }
-//}
+package org.example.controllers;
+
+import org.example.connect.MyConnection;
+import org.example.models.Attendance;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Date;
+
+public class AttendanceController {
+    private Connection connection;
+
+    public AttendanceController() {
+        // Initialize database connection
+        this.connection = MyConnection.getConnection();
+    }
+
+
+    public boolean markAttendance(int employeeID, Date date, int hoursWorked, String shift) {
+        String query = "INSERT INTO Attendance (EmployeeID, Date, HoursWorked, Shift, CreatedBy, UpdatedBy) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = MyConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, employeeID);
+            stmt.setDate(2, (java.sql.Date) date);
+            stmt.setInt(3, hoursWorked);
+            stmt.setString(4, shift);
+            stmt.setInt(5, 1); // Replace with the actual created by user ID
+            stmt.setInt(6, 1); // Replace with the actual updated by user ID
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+}

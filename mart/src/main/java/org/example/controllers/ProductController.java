@@ -1,14 +1,12 @@
 package org.example.controllers;
 
 import org.example.connect.MyConnection;
-import org.example.models.Product;
-import org.example.models.ProductImage;
-import org.example.models.Supplier;
-import org.example.models.User;
+import org.example.models.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -150,11 +148,69 @@ public class ProductController extends Component {
     }
 
 
+    public boolean giaoDichSanPham(SalesReceiptDetail salesReceiptDetail, String customerName, String paymentMethod, int employeeID, int userID) {
+        String insertSalesReceiptSQL = "INSERT INTO SalesReceipts (EmployeeID, SaleDate, TotalAmount, CustomerName, PaymentMethod, CreatedBy, UpdatedBy) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String insertSalesReceiptDetailSQL = "INSERT INTO SalesReceiptDetails (SalesReceiptID, ProductID, Quantity, UnitPrice, TotalPrice, CreatedBy, UpdatedBy) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String updateProductStockSQL = "UPDATE Products SET StockQuantity = StockQuantity - ? WHERE ProductID = ?";
 
+        try (Connection conn = MyConnection.getConnection();
+             PreparedStatement insertSalesReceiptStmt = conn.prepareStatement(insertSalesReceiptSQL, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement insertSalesReceiptDetailStmt = conn.prepareStatement(insertSalesReceiptDetailSQL);
+             PreparedStatement updateStmt = conn.prepareStatement(updateProductStockSQL)) {
 
+            // Thực hiện giao dịch trong một transaction
+            conn.setAutoCommit(false);
 
+            // Thêm thông tin phiếu bán hàng vào bảng SalesReceipts
+            insertSalesReceiptStmt.setInt(1, employeeID);
+            // Thay đổi SaleDate thành ngày hiện tại hoặc ngày của giao dịch
+            insertSalesReceiptStmt.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+            // Thay đổi TotalAmount thành tổng giá tiền của chi tiết phiếu bán hàng
+            insertSalesReceiptStmt.setBigDecimal(3, BigDecimal.valueOf(salesReceiptDetail.getTotalPrice()));
+            insertSalesReceiptStmt.setString(4, customerName); // Sử dụng tên khách hàng từ tham số
+            insertSalesReceiptStmt.setString(5, paymentMethod); // Sử dụng phương thức thanh toán từ tham số
+            insertSalesReceiptStmt.setInt(6, userID);
+            insertSalesReceiptStmt.setInt(7, userID);
+            insertSalesReceiptStmt.executeUpdate();
 
+            // Lấy SalesReceiptID vừa được tạo
+            ResultSet generatedKeys = insertSalesReceiptStmt.getGeneratedKeys();
+            int salesReceiptID = -1;
+            if (generatedKeys.next()) {
+                salesReceiptID = generatedKeys.getInt(1);
+            }
 
+            // Thêm thông tin chi tiết phiếu bán hàng vào bảng SalesReceiptDetails
+            insertSalesReceiptDetailStmt.setInt(1, salesReceiptID);
+            insertSalesReceiptDetailStmt.setInt(2, salesReceiptDetail.getProductID());
+            insertSalesReceiptDetailStmt.setInt(3, salesReceiptDetail.getQuantity());
+            insertSalesReceiptDetailStmt.setBigDecimal(4, BigDecimal.valueOf(salesReceiptDetail.getUnitPrice()));
+            insertSalesReceiptDetailStmt.setBigDecimal(5, BigDecimal.valueOf(salesReceiptDetail.getTotalPrice()));
+            insertSalesReceiptDetailStmt.setInt(6, userID);
+            insertSalesReceiptDetailStmt.setInt(7, userID);
+            insertSalesReceiptDetailStmt.executeUpdate();
+
+            // Cập nhật số lượng sản phẩm trong bảng Products
+            updateStmt.setInt(1, salesReceiptDetail.getQuantity());
+            updateStmt.setInt(2, salesReceiptDetail.getProductID());
+            updateStmt.executeUpdate();
+
+            // Commit transaction
+            conn.commit();
+
+            return true; // Giao dịch thành công
+
+        } catch (SQLException e) {
+            // Rollback transaction nếu có lỗi
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            e.printStackTrace();
+            return false; // Giao dịch không thành công
+        }
+    }
 
 
     private int getInsertedSupplierID() throws SQLException {
@@ -222,9 +278,6 @@ public class ProductController extends Component {
             }
         }
     }
-
-
-
 
 
     public boolean deleteProduct(int productID) {
@@ -315,6 +368,36 @@ public class ProductController extends Component {
     }
 
 
+    public int getStockQuantity(int productID) {
+        String query = "SELECT StockQuantity FROM Products WHERE ProductID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, productID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("StockQuantity");
+                } else {
+                    throw new SQLException("Product not found.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Trả về -1 nếu có lỗi xảy ra
+        }
+    }
+
+    public double getUnitPrice(int productID) throws SQLException {
+        String query = "SELECT UnitPrice FROM Products WHERE ProductID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, productID);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("UnitPrice");
+                } else {
+                    throw new SQLException("Product not found.");
+                }
+            }
+        }
+    }
 
     public DefaultTableModel getAllProductGiaoDichDetails() {
         String[] columnNames = {"Mã sản phẩm", "Tên sản phẩm", "Danh mục", "Số lượng tồn kho", "Đơn giá", "Nhà cung cấp", "Tạo bởi", "Người tạo", "Cập nhật bởi", "Người cập nhật", "Thời gian cập nhật", "Hình ảnh"};
@@ -367,5 +450,42 @@ public class ProductController extends Component {
         return model;
     }
 
+    public boolean addSalesReceiptDetail(SalesReceiptDetail salesReceiptDetail) {
+        String insertSalesReceiptDetailQuery = "INSERT INTO SalesReceiptDetails (SalesReceiptID, ProductID, Quantity, UnitPrice, TotalPrice, CreatedBy, UpdatedBy) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            // Thực hiện thêm chi tiết giao dịch vào cơ sở dữ liệu
+            PreparedStatement insertSalesReceiptDetailStmt = connection.prepareStatement(insertSalesReceiptDetailQuery);
+            insertSalesReceiptDetailStmt.setInt(1, salesReceiptDetail.getSalesReceiptID());
+            insertSalesReceiptDetailStmt.setInt(2, salesReceiptDetail.getProductID());
+            insertSalesReceiptDetailStmt.setInt(3, salesReceiptDetail.getQuantity());
+            insertSalesReceiptDetailStmt.setDouble(4, salesReceiptDetail.getUnitPrice());
+            insertSalesReceiptDetailStmt.setDouble(5, salesReceiptDetail.getTotalPrice());
+            insertSalesReceiptDetailStmt.setInt(6, salesReceiptDetail.getCreatedBy());
+            insertSalesReceiptDetailStmt.setInt(7, salesReceiptDetail.getUpdatedBy());
+            insertSalesReceiptDetailStmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateStockQuantity(int productID, int newStockQuantity) {
+        String updateStockQuantityQuery = "UPDATE Products SET StockQuantity = ? WHERE ProductID = ?";
+
+        try {
+            // Thực hiện cập nhật số lượng hàng trong cơ sở dữ liệu
+            PreparedStatement updateStockQuantityStmt = connection.prepareStatement(updateStockQuantityQuery);
+            updateStockQuantityStmt.setInt(1, newStockQuantity);
+            updateStockQuantityStmt.setInt(2, productID);
+            updateStockQuantityStmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }
