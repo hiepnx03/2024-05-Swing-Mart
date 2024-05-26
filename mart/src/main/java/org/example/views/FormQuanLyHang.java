@@ -723,7 +723,6 @@ public class FormQuanLyHang extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Xóa nhà cung cấp thành công!");
                 // Cập nhật lại bảng dữ liệu
 
-                showSanPham();
                 showNhaCungCap();
                 loadSupplier();
             } else {
@@ -742,59 +741,85 @@ public class FormQuanLyHang extends javax.swing.JFrame {
     }//GEN-LAST:event_btnXoaNhaCungCapActionPerformed
 
     private void btnSuaNhaCungCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaNhaCungCapActionPerformed
-        // TODO add your handling code here:
-        try {
-            // Lấy dữ liệu từ các trường nhập
-            int supplierID = Integer.parseInt(tbSupplierID.getText());
-            String supplierName = tbSupplierName.getText();
-            String contactInfo = tbContactInfo.getText();
-            String address = tbAddress.getText();
-            String phone = tbPhone.getText();
-            String email = tbEmail.getText();
-            int updatedBy = 1; // Thay đổi theo user hiện tại
+        String supplierName = tbSupplierName.getText();
+        String contactInfo = tbContactInfo.getText();
+        String address = tbAddress.getText();
+        String phone = tbPhone.getText();
+        String email = tbEmail.getText();
 
-            // Tạo đối tượng Supplier
-            Supplier supplier = new Supplier();
-            supplier.setSupplierID(supplierID);
-            supplier.setSupplierName(supplierName);
-            supplier.setContactInfo(contactInfo);
-            supplier.setAddress(address);
-            supplier.setPhone(phone);
-            supplier.setEmail(email);
-            supplier.setUpdatedBy(updatedBy);
+        // Get the selected supplier ID
+        int supplierID = getSelectedSupplierID();
 
-            // Gọi phương thức updateSupplier từ SupplierController
-            SupplierController supplierController = new SupplierController();
-            boolean success = supplierController.updateSupplier(supplier);
+        // Validate the supplier ID
+        if (supplierID == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhà cung cấp cần sửa.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Cập nhật nhà cung cấp thành công!");
-                // Cập nhật lại bảng dữ liệu
+        // Sử dụng giá trị loggedInUserID đã được lưu trong lớp FormDangNhap
+        int userID = loggedInUserID;
 
-                showSanPham();
-                showNhaCungCap();
-                loadSupplier();
-            } else {
-                JOptionPane.showMessageDialog(this, "Cập nhật nhà cung cấp thất bại!");
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng dữ liệu cho SupplierID.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi cập nhật nhà cung cấp.");
+        if (userID == 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập trước khi thực hiện sửa nhà cung cấp.");
+            return;
+        }
+
+        // Get the current user ID
+        int updatedBy = userID;
+
+        // Tạo đối tượng Supplier với thông tin cập nhật
+        Supplier supplier = new Supplier();
+        supplier.setSupplierID(supplierID); // Set the supplier ID
+        supplier.setSupplierName(supplierName);
+        supplier.setContactInfo(contactInfo);
+        supplier.setAddress(address);
+        supplier.setPhone(phone);
+        supplier.setEmail(email);
+        supplier.setUpdatedBy(updatedBy);
+
+        // Gọi phương thức updateSupplier từ SupplierController
+        SupplierController supplierController = new SupplierController();
+        boolean success = supplierController.updateSupplier(supplier);
+
+        // Provide feedback to the user
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Cập nhật nhà cung cấp thành công!");
+
+            showNhaCungCap();
+            loadSupplier();
+        } else {
+            JOptionPane.showMessageDialog(this, "Cập nhật nhà cung cấp thất bại!");
         }
     }//GEN-LAST:event_btnSuaNhaCungCapActionPerformed
 
+    private int getSelectedSupplierID() {
+        int selectedRow = TableNhaCungCap.getSelectedRow(); // Assuming supplierTable is your JTable
+        if (selectedRow == -1) {
+            return -1; // No row is selected
+        }
+        // Assuming the supplier ID is in the first column
+        return (int) TableNhaCungCap.getValueAt(selectedRow, 0); // Adjust the column index as needed
+    }
+
     private void btnThemNhaCungCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemNhaCungCapActionPerformed
-        // TODO add your handling code here:
         // Lấy dữ liệu từ các trường nhập
         String supplierName = tbSupplierName.getText();
         String contactInfo = tbContactInfo.getText();
         String address = tbAddress.getText();
         String phone = tbPhone.getText();
         String email = tbEmail.getText();
-        int createdBy = 1; // Thay đổi theo user hiện tại
-        int updatedBy = 1; // Thay đổi theo user hiện tại
+
+        // Sử dụng giá trị loggedInUserID đã được lưu trong lớp FormDangNhap
+        int userID = loggedInUserID;
+
+        if (userID == 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập trước khi thực hiện thêm sản phẩm.");
+            return;
+        }
+
+        // Get the current user ID
+        int createdBy = userID;
+        int updatedBy = userID;
 
         // Tạo đối tượng Supplier
         Supplier supplier = new Supplier();
@@ -812,9 +837,7 @@ public class FormQuanLyHang extends javax.swing.JFrame {
 
         if (success) {
             JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thành công!");
-
             showSanPham();
-            showNhaCungCap();
             loadSupplier();
         } else {
             JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thất bại!");
@@ -948,8 +971,6 @@ public class FormQuanLyHang extends javax.swing.JFrame {
                 // Cập nhật lại bảng dữ liệu
 
                 showSanPham();
-                showNhaCungCap();
-                showSanPham();
                 refreshTable();
             } else {
 
@@ -1017,8 +1038,6 @@ public class FormQuanLyHang extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Sản phẩm đã được cập nhật thành công!");
             // Cập nhật lại dữ liệu trong bảng
             showSanPham();
-
-            showNhaCungCap();
             refreshTable();
         } else {
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi cập nhật sản phẩm!");
@@ -1075,7 +1094,6 @@ public class FormQuanLyHang extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Sản phẩm đã được thêm thành công!");
 
             showSanPham();
-            showNhaCungCap();
             refreshTable();
         } else {
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi thêm sản phẩm!");

@@ -82,6 +82,8 @@ public class SupplierController {
         return model;
     }
 
+
+
     public boolean addSupplier(Supplier supplier) {
         String sql = "INSERT INTO Suppliers (SupplierName, ContactInfo, Address, Phone, Email, CreatedBy, UpdatedBy) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = MyConnection.getConnection();
@@ -112,11 +114,12 @@ public class SupplierController {
             preparedStatement.setInt(6, supplier.getUpdatedBy());
             preparedStatement.setInt(7, supplier.getSupplierID());
             return preparedStatement.executeUpdate() > 0;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
 
     public boolean deleteSupplier(int supplierID) {
         String countProductsSql = "SELECT COUNT(*) FROM Products WHERE SupplierID = ?";
