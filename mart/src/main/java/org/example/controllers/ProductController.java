@@ -6,13 +6,15 @@ import org.example.models.ProductImage;
 import org.example.models.Supplier;
 import org.example.models.User;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProductController {
+public class ProductController extends Component {
 
     private Connection connection;
 
@@ -105,9 +107,10 @@ public class ProductController {
     }
 
 
-    public boolean addProduct(Product product, ProductImage productImage, int supplierID) {
-        String insertProductQuery = "INSERT INTO Products (ProductName, Category, StockQuantity, UnitPrice, SupplierID, UpdatedBy, UpdatedAt) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public boolean addProduct(Product product, ProductImage productImage, int supplierID, int userID) {
+        String insertProductQuery = "INSERT INTO Products (ProductName, Category, StockQuantity, UnitPrice, SupplierID, CreatedBy, UpdatedBy, UpdatedAt) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         String insertProductImageQuery = "INSERT INTO ProductImages (ProductID, ImageUrl, CreatedAt) VALUES (?, ?, ?)";
 
         try {
@@ -118,8 +121,9 @@ public class ProductController {
             insertProductStmt.setInt(3, product.getStockQuantity());
             insertProductStmt.setDouble(4, product.getUnitPrice());
             insertProductStmt.setInt(5, supplierID);
-            insertProductStmt.setInt(6, product.getUpdatedBy());
-            insertProductStmt.setTimestamp(7, new Timestamp(new Date().getTime()));
+            insertProductStmt.setInt(6, userID); // Sử dụng userID cho trường CreatedBy
+            insertProductStmt.setInt(7, userID); // Sử dụng userID cho trường UpdatedBy
+            insertProductStmt.setTimestamp(8, new Timestamp(new Date().getTime()));
             insertProductStmt.executeUpdate();
 
             // Lấy ID của sản phẩm vừa thêm
@@ -150,6 +154,9 @@ public class ProductController {
 
 
 
+
+
+
     private int getInsertedSupplierID() throws SQLException {
         // Lấy ID của nhà cung cấp vừa được thêm vào
         String selectLastSupplierIDQuery = "SELECT LAST_INSERT_ID()";
@@ -168,41 +175,197 @@ public class ProductController {
         return resultSet.getInt(1);
     }
 
-    public boolean updateProduct(Product product) {
-        String updateProductQuery = "UPDATE Products SET ProductName = ?, Category = ?, StockQuantity = ?, UnitPrice = ?, UpdatedBy = ?, UpdatedAt = ? WHERE ProductID = ?";
+    public boolean updateProduct(Product product, ProductImage productImage, int supplierID, int userID) {
+        String updateProductQuery = "UPDATE Products SET ProductName = ?, Category = ?, StockQuantity = ?, UnitPrice = ?, SupplierID = ?, UpdatedBy = ?, UpdatedAt = ? WHERE ProductID = ?";
+        String updateProductImageQuery = "UPDATE ProductImages SET ImageUrl = ? WHERE ProductID = ?";
 
-        try (PreparedStatement updateProductStmt = connection.prepareStatement(updateProductQuery)) {
+        try {
+            // Bắt đầu giao dịch
+            connection.setAutoCommit(false);
+
+            // Cập nhật thông tin sản phẩm
+            PreparedStatement updateProductStmt = connection.prepareStatement(updateProductQuery);
             updateProductStmt.setString(1, product.getProductName());
             updateProductStmt.setString(2, product.getCategory());
             updateProductStmt.setInt(3, product.getStockQuantity());
             updateProductStmt.setDouble(4, product.getUnitPrice());
-            updateProductStmt.setInt(5, product.getUpdatedBy());
-            updateProductStmt.setTimestamp(6, new Timestamp(new Date().getTime()));
-            updateProductStmt.setInt(7, product.getProductID());
+            updateProductStmt.setInt(5, supplierID);
+            updateProductStmt.setInt(6, userID);
+            updateProductStmt.setTimestamp(7, new Timestamp(new Date().getTime()));
+            updateProductStmt.setInt(8, product.getProductID());
+            updateProductStmt.executeUpdate();
 
-            int rowsAffected = updateProductStmt.executeUpdate();
+            // Cập nhật thông tin hình ảnh sản phẩm
+            PreparedStatement updateProductImageStmt = connection.prepareStatement(updateProductImageQuery);
+            updateProductImageStmt.setString(1, productImage.getImageUrl());
+            updateProductImageStmt.setInt(2, product.getProductID());
+            updateProductImageStmt.executeUpdate();
 
-            return rowsAffected > 0;
+            // Hoàn thành giao dịch
+            connection.commit();
+            return true;
         } catch (SQLException e) {
+            try {
+                // Rollback nếu có lỗi
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                // Đặt lại trạng thái tự động commit
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
+
+
+
 
 
     public boolean deleteProduct(int productID) {
+        String deleteProductImageQuery = "DELETE FROM ProductImages WHERE ProductID = ?";
+        String deletePricingQuery = "DELETE FROM Pricing WHERE ProductID = ?";
         String deleteProductQuery = "DELETE FROM Products WHERE ProductID = ?";
+        String deleteSalesReceiptDetailsQuery = "DELETE FROM salesreceiptdetails WHERE ProductID = ?";
 
-        try (PreparedStatement deleteProductStmt = connection.prepareStatement(deleteProductQuery)) {
+        try {
+            // Begin transaction
+            connection.setAutoCommit(false);
+
+            // Delete product images
+            PreparedStatement deleteProductImageStmt = connection.prepareStatement(deleteProductImageQuery);
+            deleteProductImageStmt.setInt(1, productID);
+            deleteProductImageStmt.executeUpdate();
+
+            // Delete related pricing rows
+            PreparedStatement deletePricingStmt = connection.prepareStatement(deletePricingQuery);
+            deletePricingStmt.setInt(1, productID);
+            deletePricingStmt.executeUpdate();
+
+            // Delete related sales receipt details
+            PreparedStatement deleteSalesReceiptDetailsStmt = connection.prepareStatement(deleteSalesReceiptDetailsQuery);
+            deleteSalesReceiptDetailsStmt.setInt(1, productID);
+            deleteSalesReceiptDetailsStmt.executeUpdate();
+
+            // Delete product
+            PreparedStatement deleteProductStmt = connection.prepareStatement(deleteProductQuery);
             deleteProductStmt.setInt(1, productID);
+            deleteProductStmt.executeUpdate();
 
-            int rowsAffected = deleteProductStmt.executeUpdate();
-
-            return rowsAffected > 0;
+            // Commit transaction
+            connection.commit();
+            return true;
         } catch (SQLException e) {
+            try {
+                // Rollback if there's an error
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+
+            // Handle the specific SQLIntegrityConstraintViolationException
+            if (e instanceof SQLIntegrityConstraintViolationException) {
+                SQLIntegrityConstraintViolationException sqlEx = (SQLIntegrityConstraintViolationException) e;
+                if (sqlEx.getErrorCode() == 1451 || sqlEx.getErrorCode() == 1452) {
+                    // Display a user-friendly error message for foreign key constraint violation
+                    JOptionPane.showMessageDialog(null, "Không thể xóa sản phẩm vì có dữ liệu liên quan đến sản phẩm này.");
+                    return false;
+                }
+            }
+
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                // Reset auto-commit mode
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
+
+
+    public boolean checkFileNameExists(String fileName) {
+        try {
+            // Prepare the SQL statement to check if the file name exists
+            String query = "SELECT COUNT(*) AS count FROM ProductImages WHERE ImageUrl = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                // Set the file name parameter in the prepared statement
+                statement.setString(1, fileName);
+
+                // Execute the query
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    // Check if any row exists with the given file name
+                    if (resultSet.next()) {
+                        int count = resultSet.getInt("count");
+                        return count > 0;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+
+    public DefaultTableModel getAllProductGiaoDichDetails() {
+        String[] columnNames = {"Mã sản phẩm", "Tên sản phẩm", "Danh mục", "Số lượng tồn kho", "Đơn giá", "Nhà cung cấp", "Tạo bởi", "Người tạo", "Cập nhật bởi", "Người cập nhật", "Thời gian cập nhật", "Hình ảnh"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        String sql = "SELECT " +
+                "p.ProductID AS 'Mã sản phẩm', " +
+                "p.ProductName AS 'Tên sản phẩm', " +
+                "p.Category AS 'Danh mục', " +
+                "p.StockQuantity AS 'Số lượng tồn kho', " +
+                "p.UnitPrice AS 'Đơn giá', " +
+                "s.SupplierName AS 'Nhà cung cấp', " +
+                "p.CreatedBy AS 'Tạo bởi', " +
+                "uc.Username AS 'Người tạo', " +
+                "p.UpdatedBy AS 'Cập nhật bởi', " +
+                "uu.Username AS 'Người cập nhật', " +
+                "p.UpdatedAt AS 'Thời gian cập nhật', " +
+                "pi.ImageUrl AS 'Hình ảnh' " +
+                "FROM Products p " +
+                "LEFT JOIN Suppliers s ON p.SupplierID = s.SupplierID " +
+                "LEFT JOIN Users uc ON p.CreatedBy = uc.UserID " +
+                "LEFT JOIN Users uu ON p.UpdatedBy = uu.UserID " +
+                "LEFT JOIN ProductImages pi ON p.ProductID = pi.ProductID";
+
+        try (Connection conn = MyConnection.getConnection();
+             PreparedStatement preparedStatement = conn.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                int productID = resultSet.getInt("Mã sản phẩm");
+                String productName = resultSet.getString("Tên sản phẩm");
+                String category = resultSet.getString("Danh mục");
+                int stockQuantity = resultSet.getInt("Số lượng tồn kho");
+                double unitPrice = resultSet.getDouble("Đơn giá");
+                String supplierName = resultSet.getString("Nhà cung cấp");
+                int createdBy = resultSet.getInt("Tạo bởi");
+                String creatorUsername = resultSet.getString("Người tạo");
+                int updatedBy = resultSet.getInt("Cập nhật bởi");
+                String updaterUsername = resultSet.getString("Người cập nhật");
+                java.util.Date updatedAt = resultSet.getTimestamp("Thời gian cập nhật");
+                String imageUrl = resultSet.getString("Hình ảnh");
+
+                model.addRow(new Object[]{productID, productName, category, stockQuantity, unitPrice, supplierName, createdBy, creatorUsername, updatedBy, updaterUsername, updatedAt, imageUrl});
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return model;
+    }
+
 
 }

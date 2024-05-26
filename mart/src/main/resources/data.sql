@@ -9,16 +9,16 @@ VALUES
 -- Thêm dữ liệu cho bảng Users
 INSERT INTO Users (Username, PasswordHash, Email, EmployeeID)
 VALUES
-    ('john_doe', 'password_hash', 'john@example.com', 1),
-    ('jane_smith', 'password_hash', 'jane@example.com', 2),
-    ('mike_johnson', 'password_hash', 'mike@example.com', 3),
-    ('emily_brown', 'password_hash', 'emily@example.com', 4);
+    ('ns', 'ns', 'nhansu@gmail.com', 1),
+    ('gd', 'gd', 'giaodich@gmail.com', 2),
+    ('h', 'h', 'hang@gmail.com', 3),
+    ('kt', 'kt', 'kt@gmail.com', 4);
 
 -- Thêm dữ liệu cho bảng Roles
 INSERT INTO Roles (RoleName, Description)
 VALUES
     ('bộ phận nhân sự', 'bộ phận nhân sự'),
-    ('bộ phận cung ứng', 'bộ phận cung ứng'),
+    ('bộ phận giao dịch', 'bộ phận giao dịch'),
     ('quản lý hàng', 'quản lý hàng'),
     ('kế toán', 'kế toán'),
     ('Admin', 'Admin');

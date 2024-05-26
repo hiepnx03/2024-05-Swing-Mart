@@ -119,14 +119,52 @@ public class SupplierController {
     }
 
     public boolean deleteSupplier(int supplierID) {
-        String sql = "DELETE FROM Suppliers WHERE SupplierID = ?";
-        try (Connection conn = MyConnection.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-            preparedStatement.setInt(1, supplierID);
-            return preparedStatement.executeUpdate() > 0;
-        } catch (Exception e) {
+        String countProductsSql = "SELECT COUNT(*) FROM Products WHERE SupplierID = ?";
+        String deletePricingSql = "DELETE FROM Pricing WHERE ProductID IN (SELECT ProductID FROM Products WHERE SupplierID = ?)";
+        String deleteProductsSql = "DELETE FROM Products WHERE SupplierID = ?";
+        String deleteSupplierSql = "DELETE FROM Suppliers WHERE SupplierID = ?";
+        try (Connection conn = MyConnection.getConnection()) {
+            conn.setAutoCommit(false);
+            try (PreparedStatement countProductsStmt = conn.prepareStatement(countProductsSql);
+                 PreparedStatement deletePricingStmt = conn.prepareStatement(deletePricingSql);
+                 PreparedStatement deleteProductsStmt = conn.prepareStatement(deleteProductsSql);
+                 PreparedStatement deleteSupplierStmt = conn.prepareStatement(deleteSupplierSql)) {
+
+                // Check if there are any products associated with the supplier ID
+                countProductsStmt.setInt(1, supplierID);
+                ResultSet resultSet = countProductsStmt.executeQuery();
+                resultSet.next();
+                int productCount = resultSet.getInt(1);
+                if (productCount > 0) {
+                    // If there are products, throw an exception or handle it accordingly
+                    throw new RuntimeException("Cannot delete supplier because it has associated products.");
+                }
+
+                deletePricingStmt.setInt(1, supplierID);
+                int deletedPricingRows = deletePricingStmt.executeUpdate();
+
+                deleteProductsStmt.setInt(1, supplierID);
+                int deletedProductRows = deleteProductsStmt.executeUpdate();
+
+                deleteSupplierStmt.setInt(1, supplierID);
+                boolean success = deleteSupplierStmt.executeUpdate() > 0;
+
+                conn.commit();
+                return success;
+            } catch (SQLException e) {
+                conn.rollback();
+                e.printStackTrace();
+                // You can log the exception or throw a custom exception here
+                throw new RuntimeException("Error deleting supplier: " + e.getMessage());
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            // You can log the exception or throw a custom exception here
+            throw new RuntimeException("Error connecting to the database: " + e.getMessage());
         }
     }
+
+
+
+
 }

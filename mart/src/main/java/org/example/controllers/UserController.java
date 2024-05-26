@@ -8,7 +8,9 @@ import org.example.models.User;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserController {
     private Connection connection;
@@ -16,6 +18,34 @@ public class UserController {
     public UserController() {
         // Initialize database connection
         this.connection = MyConnection.getConnection();
+    }
+    private int loggedInUserID = -1; // Default value indicating no user is logged in
+    private Map<Integer, Integer> sessionUserMap = new HashMap<>(); // Map to store user IDs in session
+
+    public int getUserID(String username) {
+        int userID = -1; // Default value if user ID is not found
+
+        // Implement your logic to retrieve the user ID from the database based on the username
+        // This could involve executing a SQL query to fetch the user ID associated with the provided username
+        String query = "SELECT userID FROM users WHERE username = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                userID = resultSet.getInt("userID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userID;
+    }
+
+    public void setUserIDInSession(int userID) {
+        loggedInUserID = userID; // Set the logged-in user ID in the controller
+
+        // Also, store the user ID in the session map
+        sessionUserMap.put(userID, userID);
     }
 
     public boolean loginWithRole(String username, String password, String roleName) {

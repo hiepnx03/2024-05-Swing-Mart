@@ -8,6 +8,11 @@ import org.example.controllers.UserController;
 import org.example.models.Role;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 
 /**
@@ -16,6 +21,11 @@ import java.util.List;
  */
 public class FormDangNhap extends javax.swing.JFrame {
     private UserController userController; // Thêm biến để truy cập vào controller
+    private final int loggedInUserID; // Declare as final
+
+    public int getLoggedInUserID() {
+        return loggedInUserID;
+    }
 
     /**
      * Creates new form FormDangNhap
@@ -23,7 +33,64 @@ public class FormDangNhap extends javax.swing.JFrame {
     public FormDangNhap() {
         initComponents();
         userController = new UserController(); // Khởi tạo UserController
+        loggedInUserID = 0; // Initialize the final variable
         loadRoles(); // Load danh sách quyền khi form được tạo
+        addKeyListeners();
+        addEscapeKeyBinding();
+    }
+
+    private void addEscapeKeyBinding() {
+        String escapeAction = "escapeAction";
+        KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
+
+        Action escapeActionHandler = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object[] options = {"Thoát", "Không"};
+                int response = JOptionPane.showOptionDialog(
+                        FormDangNhap.this,
+                        "Bạn có muốn thoát chương trình?",
+                        "Xác nhận",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
+                if (response == JOptionPane.NO_OPTION) {
+                    System.out.println("không có gì");
+                } else if (response == JOptionPane.YES_OPTION) {
+                    // Thoát chương trình
+                    System.out.println("đã thoát chương trình đăng nhập");
+                    System.exit(0);
+                }
+            }
+        };
+
+        JRootPane rootPane = this.getRootPane();
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, escapeAction);
+        rootPane.getActionMap().put(escapeAction, escapeActionHandler);
+    }
+
+
+    private void addKeyListeners() {
+        KeyListener keyListener = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int keyCode = e.getKeyCode();
+                if (keyCode == KeyEvent.VK_ENTER) {
+                    btnDangNhap.doClick(); // Giả lập sự kiện nhấn nút Đăng Nhập
+                }
+//                else if (keyCode == KeyEvent.VK_ESCAPE) {
+//                    dispose(); // Đóng form đăng nhập
+//                }
+            }
+        };
+
+        tbUsername.addKeyListener(keyListener);
+        tbPassword.addKeyListener(keyListener);
+        cbRole.addKeyListener(keyListener);
+        btnDangNhap.addKeyListener(keyListener);
     }
     private void loadRoles() {
         List<Role> roles = userController.getAllRoles();
@@ -184,27 +251,41 @@ public class FormDangNhap extends javax.swing.JFrame {
         String password = tbPassword.getText();
         String selectedRole = cbRole.getSelectedItem().toString();
 
+        // Attempt login
         boolean loggedIn = userController.loginWithRole(username, password, selectedRole);
 
         if (loggedIn) {
+            // Retrieve the user's ID after successful login
+            int userID = userController.getUserID(username);
+
+            // Save the user ID in the session
+            userController.setUserIDInSession(userID);
+
+            // Update the loggedInUserID
+
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công với quyền: " + selectedRole);
-            // Chuyển hướng đến trang tương ứng với quyền
+            System.out.println("Đăng nhập thành công với các thông tin");
+            // Redirect to the appropriate page based on the user's role
             switch(selectedRole) {
                 case "bộ phận nhân sự":
                     FormNhanSu formNhanSu = new FormNhanSu();
                     formNhanSu.setVisible(true);
+                    System.out.println("Chức Vụ: bộ phận nhân sự");
                     break;
-                case "bộ phận cung ứng":
-                    FormCungUng formCungUng = new FormCungUng();
+                case "bộ phận giao dịch":
+                    FormGiaoDich formCungUng = new FormGiaoDich(userID);
                     formCungUng.setVisible(true);
+                    System.out.println("Chức Vụ: bộ phận giao dịch");
                     break;
                 case "quản lý hàng":
-                    FormQuanLyHang formQuanLyHang = new FormQuanLyHang();
+                    FormQuanLyHang formQuanLyHang = new FormQuanLyHang(userID);
                     formQuanLyHang.setVisible(true);
+                    System.out.println("Chức Vụ: quản lý hàng");
                     break;
                 case "kế toán":
                     FormKeToan formKeToan = new FormKeToan();
                     formKeToan.setVisible(true);
+                    System.out.println("Chức Vụ: kế toán");
                     break;
                 case "Admin":
                     FormAdmin formAdmin = new FormAdmin();
@@ -213,7 +294,10 @@ public class FormDangNhap extends javax.swing.JFrame {
                 default:
                     JOptionPane.showMessageDialog(this, "Không tìm thấy trang tương ứng cho quyền này");
             }
-            this.dispose(); // Đóng FormLogin sau khi chuyển hướng
+            System.out.println("UserName: " + username);
+            System.out.println("UserID: " + userID);
+
+            this.dispose(); // Close the login form
         } else {
             JOptionPane.showMessageDialog(this, "Đăng nhập thất bại");
         }

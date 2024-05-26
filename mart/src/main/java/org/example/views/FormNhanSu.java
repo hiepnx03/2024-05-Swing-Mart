@@ -12,6 +12,11 @@ import org.example.models.User;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,6 +37,44 @@ public class FormNhanSu extends javax.swing.JFrame {
         userController = new UserController(); // Assign the local instance to the class variable
         loadRoles(); // Load danh sách quyền khi form được tạo
         loadEmployee(); // Load danh sách quyền khi form được tạo
+        addEscapeKeyBinding();
+    }
+    private void addEscapeKeyBinding() {
+        String escapeAction = "escapeAction";
+        KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
+
+        Action escapeActionHandler = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object[] options = {"Đăng xuất", "Thoát", "Không"};
+                int response = JOptionPane.showOptionDialog(
+                        FormNhanSu.this,
+                        "Bạn có muốn đăng xuất hay thoát chương trình?",
+                        "Xác nhận",
+                        JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
+
+                if (response == JOptionPane.YES_OPTION) {
+                    // Xử lý đăng xuất
+                    System.out.println("Bộ phận nhân sự đã đăng xuất");
+                    btnDangXuatActionPerformed(null);
+                } else if (response == JOptionPane.NO_OPTION) {
+                        System.out.println("Đã thoát chương trình");
+                    // Thoát chương trình
+                    System.exit(0);
+                }else if (response == JOptionPane.CANCEL_OPTION) {
+                    System.out.println("Không có gì");
+                }
+            }
+        };
+
+        JRootPane rootPane = this.getRootPane();
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, escapeAction);
+        rootPane.getActionMap().put(escapeAction, escapeActionHandler);
     }
 
 
@@ -137,6 +180,7 @@ public class FormNhanSu extends javax.swing.JFrame {
         Role = new javax.swing.JComboBox<>();
         jPchamcong = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        btnDangXuat = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -148,6 +192,7 @@ public class FormNhanSu extends javax.swing.JFrame {
 
         jLabel5.setText("LastName");
 
+        TableQuanLyNhanVien.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         TableQuanLyNhanVien.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -159,7 +204,9 @@ public class FormNhanSu extends javax.swing.JFrame {
 
             }
         ));
-        TableQuanLyNhanVien.setCellSelectionEnabled(true);
+        TableQuanLyNhanVien.setRowHeight(50);
+        TableQuanLyNhanVien.setSelectionBackground(new java.awt.Color(51, 153, 255));
+        TableQuanLyNhanVien.setShowHorizontalLines(true);
         TableQuanLyNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TableQuanLyNhanVienMouseClicked(evt);
@@ -224,28 +271,44 @@ public class FormNhanSu extends javax.swing.JFrame {
             }
         });
 
+        btnSua.setBackground(new java.awt.Color(108, 117, 125));
+        btnSua.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnSua.setForeground(new java.awt.Color(255, 255, 255));
         btnSua.setText("Sửa");
+        btnSua.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSuaActionPerformed(evt);
             }
         });
 
+        btnXoa.setBackground(new java.awt.Color(220, 53, 69));
+        btnXoa.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnXoa.setForeground(new java.awt.Color(255, 255, 255));
         btnXoa.setText("Xóa");
+        btnXoa.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXoaActionPerformed(evt);
             }
         });
 
+        btnLamRong.setBackground(new java.awt.Color(0, 204, 204));
+        btnLamRong.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnLamRong.setForeground(new java.awt.Color(255, 255, 255));
         btnLamRong.setText("Làm Rỗng");
+        btnLamRong.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnLamRong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLamRongActionPerformed(evt);
             }
         });
 
+        btnThem.setBackground(new java.awt.Color(0, 123, 255));
+        btnThem.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnThem.setForeground(new java.awt.Color(255, 255, 255));
         btnThem.setText("Thêm");
+        btnThem.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThemActionPerformed(evt);
@@ -266,7 +329,7 @@ public class FormNhanSu extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnLamRong, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnLamRong)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPquanlynhanvienLayout.createSequentialGroup()
                         .addGroup(jPquanlynhanvienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -302,11 +365,10 @@ public class FormNhanSu extends javax.swing.JFrame {
                                     .addComponent(tbContactInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tbHireDate, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tbSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(129, 129, 129))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPquanlynhanvienLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 808, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
+                        .addGap(129, 129, 129))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPquanlynhanvienLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())))
         );
         jPquanlynhanvienLayout.setVerticalGroup(
             jPquanlynhanvienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -361,6 +423,7 @@ public class FormNhanSu extends javax.swing.JFrame {
 
         jtPmain.addTab("Quản Lý Nhân Viên", jPquanlynhanvien);
 
+        TableUser.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         TableUser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -372,6 +435,9 @@ public class FormNhanSu extends javax.swing.JFrame {
 
             }
         ));
+        TableUser.setRowHeight(50);
+        TableUser.setSelectionBackground(new java.awt.Color(51, 153, 255));
+        TableUser.setShowHorizontalLines(true);
         TableUser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TableUserMouseClicked(evt);
@@ -379,8 +445,14 @@ public class FormNhanSu extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(TableUser);
 
+        btnLamRong1.setBackground(new java.awt.Color(0, 204, 204));
+        btnLamRong1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnLamRong1.setForeground(new java.awt.Color(255, 255, 255));
         btnLamRong1.setText("Làm Rỗng");
 
+        btnXoa1.setBackground(new java.awt.Color(220, 53, 69));
+        btnXoa1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnXoa1.setForeground(new java.awt.Color(255, 255, 255));
         btnXoa1.setText("Xóa");
         btnXoa1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -388,6 +460,9 @@ public class FormNhanSu extends javax.swing.JFrame {
             }
         });
 
+        btnSua1.setBackground(new java.awt.Color(0, 123, 255));
+        btnSua1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnSua1.setForeground(new java.awt.Color(255, 255, 255));
         btnSua1.setText("Sửa");
         btnSua1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -395,6 +470,9 @@ public class FormNhanSu extends javax.swing.JFrame {
             }
         });
 
+        btnThem1.setBackground(new java.awt.Color(108, 117, 125));
+        btnThem1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnThem1.setForeground(new java.awt.Color(255, 255, 255));
         btnThem1.setText("Thêm");
         btnThem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -457,7 +535,14 @@ public class FormNhanSu extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnThem1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnThem1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSua1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnXoa1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnLamRong1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
@@ -476,17 +561,10 @@ public class FormNhanSu extends javax.swing.JFrame {
                                 .addComponent(jLabel10)
                                 .addGap(18, 18, 18)
                                 .addComponent(tbUserID, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(302, 302, 302)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel15)
-                                .addComponent(jLabel14))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnSua1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnXoa1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnLamRong1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel14))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Employee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -565,7 +643,7 @@ public class FormNhanSu extends javax.swing.JFrame {
         );
         jPchamcongLayout.setVerticalGroup(
             jPchamcongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 637, Short.MAX_VALUE)
+            .addGap(0, 638, Short.MAX_VALUE)
         );
 
         jtPmain.addTab("Chấm Công", jPchamcong);
@@ -574,6 +652,16 @@ public class FormNhanSu extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Bộ Phận Nhân Sự");
 
+        btnDangXuat.setBackground(new java.awt.Color(220, 53, 69));
+        btnDangXuat.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnDangXuat.setForeground(new java.awt.Color(255, 255, 255));
+        btnDangXuat.setText("Đăng Xuất");
+        btnDangXuat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDangXuatActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPmainLayout = new javax.swing.GroupLayout(jPmain);
         jPmain.setLayout(jPmainLayout);
         jPmainLayout.setHorizontalGroup(
@@ -581,15 +669,21 @@ public class FormNhanSu extends javax.swing.JFrame {
             .addGroup(jPmainLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPmainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jtPmain))
+                    .addComponent(jtPmain)
+                    .addGroup(jPmainLayout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(btnDangXuat)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPmainLayout.setVerticalGroup(
             jPmainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPmainLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPmainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDangXuat))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jtPmain)
                 .addContainerGap())
@@ -615,37 +709,159 @@ public class FormNhanSu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tbEmployeeIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbEmployeeIDActionPerformed
+    private void RoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RoleActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tbEmployeeIDActionPerformed
+    }//GEN-LAST:event_RoleActionPerformed
 
-    private void tbFirstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbFirstNameActionPerformed
+    private void tbPasswordHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbPasswordHashActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tbFirstNameActionPerformed
+    }//GEN-LAST:event_tbPasswordHashActionPerformed
 
-    private void tbLastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbLastNameActionPerformed
+    private void tbEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tbLastNameActionPerformed
+    }//GEN-LAST:event_tbEmailActionPerformed
 
-    private void tbPositionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbPositionActionPerformed
+    private void tbUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbUserNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tbPositionActionPerformed
+    }//GEN-LAST:event_tbUserNameActionPerformed
 
-    private void tbDateOfBirthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbDateOfBirthActionPerformed
+    private void tbUserIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbUserIDActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tbDateOfBirthActionPerformed
+    }//GEN-LAST:event_tbUserIDActionPerformed
 
-    private void tbContactInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbContactInfoActionPerformed
+    private void EmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmployeeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tbContactInfoActionPerformed
+    }//GEN-LAST:event_EmployeeActionPerformed
 
-    private void tbHireDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbHireDateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbHireDateActionPerformed
+    private void btnThem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThem1ActionPerformed
+        // Lấy thông tin từ các trường dữ liệu trên giao diện
+        String username = tbUserName.getText();
+        String passwordHash = tbPasswordHash.getText();
+        String email = tbEmail.getText();
+        String employeeName = (String) Employee.getSelectedItem(); // Lấy tên nhân viên từ JComboBox
+        String roleName = (String) Role.getSelectedItem(); // Lấy tên quyền từ JComboBox
 
-    private void tbSalaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbSalaryActionPerformed
+        // Tạo một đối tượng User từ thông tin thu thập được
+        User user = new User(username, passwordHash, email);
+
+        // Gọi phương thức addUser của UserController để thêm người dùng mới
+        UserController userController = new UserController();
+
+        // Tìm roleID từ tên quyền
+        int roleID = userController.findRoleIDByRoleName(roleName);
+
+        // Thực hiện thêm người dùng và kiểm tra kết quả
+        String result = userController.addUser(user, employeeName, roleID);
+
+        // Kiểm tra xem thêm người dùng có thành công hay không và thông báo cho người dùng
+        switch (result) {
+            case "Success":
+            JOptionPane.showMessageDialog(this, "Thêm người dùng thành công!");
+            // Load lại bảng
+            showUserTable();
+            loadEmployee();
+            showNhanVienTable();
+            // Xóa các trường nhập liệu sau khi thêm thành công
+            clearInputFields();
+            break;
+            case "Username already exists.":
+            JOptionPane.showMessageDialog(this, "Tên người dùng đã tồn tại!");
+            break;
+            case "Email already exists.":
+            JOptionPane.showMessageDialog(this, "Email đã tồn tại!");
+            break;
+            case "Employee ID already exists.":
+            JOptionPane.showMessageDialog(this, "Employee ID đã tồn tại!");
+            break;
+            default:
+            JOptionPane.showMessageDialog(this, "Thêm người dùng thất bại!");
+            break;
+        }
+    }//GEN-LAST:event_btnThem1ActionPerformed
+
+    private void btnSua1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSua1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tbSalaryActionPerformed
+        // Lấy thông tin từ các trường dữ liệu trên giao diện
+        String username = tbUserName.getText();
+        String passwordHash = tbPasswordHash.getText();
+        String email = tbEmail.getText();
+        String employeeName = (String) Employee.getSelectedItem(); // Lấy tên nhân viên từ JComboBox
+        String roleName = (String) Role.getSelectedItem(); // Lấy tên quyền từ JComboBox
+
+        // Tạo một đối tượng User từ thông tin thu thập được
+        User user = new User(username, passwordHash, email);
+
+        // Gọi phương thức updateUser của UserController để sửa thông tin người dùng
+        UserController userController = new UserController();
+
+        // Tìm roleID từ tên quyền
+        int roleID = userController.findRoleIDByRoleName(roleName);
+
+        // Thực hiện sửa thông tin người dùng và kiểm tra kết quả
+        boolean success = userController.updateUser(user, employeeName, roleID);
+
+        // Kiểm tra xem sửa thông tin người dùng có thành công hay không và thông báo cho người dùng
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Sửa thông tin người dùng thành công!");
+            // Cập nhật lại bảng hiển thị thông tin người dùng
+            showUserTable();
+            loadEmployee();
+            showNhanVienTable();
+        } else {
+            JOptionPane.showMessageDialog(this, "Sửa thông tin người dùng thất bại!");
+        }
+    }//GEN-LAST:event_btnSua1ActionPerformed
+
+    private void btnXoa1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoa1ActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = TableUser.getSelectedRow();
+        if (selectedRow != -1) { // Ensure that a row is selected
+            int userID = (int) TableUser.getValueAt(selectedRow, 0); // Assuming the first column contains userID
+            UserController userController = new UserController();
+            boolean success = userController.deleteUser(userID);
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Xóa người dùng thành công!");
+                // Load lại bảng người dùng sau khi xóa
+                showUserTable();
+                loadEmployee();
+                showNhanVienTable();
+            } else {
+                JOptionPane.showMessageDialog(this, "Xóa người dùng thất bại!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một người dùng để xóa!");
+        }
+    }//GEN-LAST:event_btnXoa1ActionPerformed
+
+    private void TableUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableUserMouseClicked
+        int selectedRow = TableUser.getSelectedRow();
+
+        if (selectedRow != -1) {
+            int userID = (int) TableUser.getValueAt(selectedRow, 0);
+            String username = (String) TableUser.getValueAt(selectedRow, 1);
+            String passwordHash = (String) TableUser.getValueAt(selectedRow, 2);
+            String email = (String) TableUser.getValueAt(selectedRow, 3);
+
+            tbUserID.setText(String.valueOf(userID));
+            tbUserName.setText(username);
+            tbPasswordHash.setText(passwordHash);
+            tbEmail.setText(email);
+
+            Role role = userController.findRoleByUserId(userID);
+            if (role != null) {
+                selectRole(role.getRoleName());
+            }
+
+            // Fetch and select the employee associated with the user
+            String fullName = userController.findEmployeeByUserId(userID);
+            if (fullName != null) {
+                selectEmployee(fullName);
+            } else {
+                Employee.setSelectedItem(null); // Clear selection if employee is not found
+            }
+
+        }
+    }//GEN-LAST:event_TableUserMouseClicked
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // Get input values from text fields
@@ -665,7 +881,6 @@ public class FormNhanSu extends javax.swing.JFrame {
             return; // Exit method if any required field is empty
         }
 
-
         // Convert string dates to java.util.Date
         Date dateOfBirthUtil = convertToDate(dateOfBirthString);
         Date hireDateUtil = convertToDate(hireDateString);
@@ -679,7 +894,6 @@ public class FormNhanSu extends javax.swing.JFrame {
         // Convert java.util.Date to java.sql.Date
         java.sql.Date dateOfBirth = new java.sql.Date(dateOfBirthUtil.getTime());
         java.sql.Date hireDate = new java.sql.Date(hireDateUtil.getTime());
-
 
         // Convert string salary to double
         double salary = Double.parseDouble(salaryString);
@@ -706,7 +920,6 @@ public class FormNhanSu extends javax.swing.JFrame {
             // Clear input fields after successful addition
             clearFields();
             showUserTable();
-            loadRoles();
             loadEmployee();
             showNhanVienTable();
             // Refresh employee table
@@ -715,11 +928,22 @@ public class FormNhanSu extends javax.swing.JFrame {
             // Show error message
             JOptionPane.showMessageDialog(this, "Failed to add employee", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
+        }
 
+        // Phương thức để làm mới các trường nhập liệu sau khi thêm nhân viên thành công
+        private void clearFields() {
+            tbEmployeeID.setText("");
+            tbFirstName.setText("");
+            tbLastName.setText("");
+            tbPosition.setText("");
+            tbDateOfBirth.setText("");
+            tbContactInfo.setText("");
+            tbHireDate.setText("");
+            tbSalary.setText("");
+    }//GEN-LAST:event_btnThemActionPerformed
 
-    // Phương thức để làm mới các trường nhập liệu sau khi thêm nhân viên thành công
-    private void clearFields() {
+    private void btnLamRongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamRongActionPerformed
+        // TODO add your handling code here:
         tbEmployeeID.setText("");
         tbFirstName.setText("");
         tbLastName.setText("");
@@ -728,7 +952,42 @@ public class FormNhanSu extends javax.swing.JFrame {
         tbContactInfo.setText("");
         tbHireDate.setText("");
         tbSalary.setText("");
-    }//GEN-LAST:event_btnThemActionPerformed
+    }//GEN-LAST:event_btnLamRongActionPerformed
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        // TODO add your handling code here:
+
+        // Fetch selected row index
+        int selectedRow = TableQuanLyNhanVien.getSelectedRow();
+
+        if (selectedRow != -1) {
+            // Fetch the employee ID from the selected row
+            int employeeID = (int) TableQuanLyNhanVien.getValueAt(selectedRow, 0);
+
+            // Confirm deletion
+            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this employee?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                EmployeeController controller = new EmployeeController();
+                boolean success = controller.deleteEmployee(employeeID);
+
+                if (success) {
+                    // Show success message
+                    JOptionPane.showMessageDialog(this, "Employee deleted successfully");
+
+                    // Refresh employee table
+                    showUserTable();
+                    loadEmployee();
+                    showNhanVienTable();
+                } else {
+                    // Show error message
+                    JOptionPane.showMessageDialog(this, "Failed to delete employee", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select an employee to delete");
+        }
+    }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
@@ -782,7 +1041,6 @@ public class FormNhanSu extends javax.swing.JFrame {
             // Clear input fields after successful addition
             clearFields();
             showUserTable();
-            loadRoles();
             loadEmployee();
             showNhanVienTable();
             // Refresh employee table
@@ -791,45 +1049,39 @@ public class FormNhanSu extends javax.swing.JFrame {
             // Show error message
             JOptionPane.showMessageDialog(this, "Failed to add employee", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
     }//GEN-LAST:event_btnSuaActionPerformed
 
-    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+    private void tbDateOfBirthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbDateOfBirthActionPerformed
         // TODO add your handling code here:
+    }//GEN-LAST:event_tbDateOfBirthActionPerformed
 
-        // Fetch selected row index
-        int selectedRow = TableQuanLyNhanVien.getSelectedRow();
+    private void tbHireDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbHireDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbHireDateActionPerformed
 
-        if (selectedRow != -1) {
-            // Fetch the employee ID from the selected row
-            int employeeID = (int) TableQuanLyNhanVien.getValueAt(selectedRow, 0);
+    private void tbContactInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbContactInfoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbContactInfoActionPerformed
 
-            // Confirm deletion
-            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this employee?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+    private void tbSalaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbSalaryActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbSalaryActionPerformed
 
-            if (confirm == JOptionPane.YES_OPTION) {
-                EmployeeController controller = new EmployeeController();
-                boolean success = controller.deleteEmployee(employeeID);
+    private void tbLastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbLastNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbLastNameActionPerformed
 
-                if (success) {
-                    // Show success message
-                    JOptionPane.showMessageDialog(this, "Employee deleted successfully");
+    private void tbPositionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbPositionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbPositionActionPerformed
 
-                    // Refresh employee table
-                    showUserTable();
-                    loadRoles();
-                    loadEmployee();
-                    showNhanVienTable();
-                } else {
-                    // Show error message
-                    JOptionPane.showMessageDialog(this, "Failed to delete employee", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Please select an employee to delete");
-        }
+    private void tbFirstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbFirstNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbFirstNameActionPerformed
 
-    }//GEN-LAST:event_btnXoaActionPerformed
+    private void tbEmployeeIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbEmployeeIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbEmployeeIDActionPerformed
 
     private void TableQuanLyNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableQuanLyNhanVienMouseClicked
         // TODO add your handling code here:
@@ -851,64 +1103,12 @@ public class FormNhanSu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_TableQuanLyNhanVienMouseClicked
 
-    private void btnLamRongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamRongActionPerformed
+    private void btnDangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangXuatActionPerformed
         // TODO add your handling code here:
-        tbEmployeeID.setText("");
-        tbFirstName.setText("");
-        tbLastName.setText("");
-        tbPosition.setText("");
-        tbDateOfBirth.setText("");
-        tbContactInfo.setText("");
-        tbHireDate.setText("");
-        tbSalary.setText("");
-    }//GEN-LAST:event_btnLamRongActionPerformed
-
-    private void btnThem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThem1ActionPerformed
-        // Lấy thông tin từ các trường dữ liệu trên giao diện
-        String username = tbUserName.getText();
-        String passwordHash = tbPasswordHash.getText();
-        String email = tbEmail.getText();
-        String employeeName = (String) Employee.getSelectedItem(); // Lấy tên nhân viên từ JComboBox
-        String roleName = (String) Role.getSelectedItem(); // Lấy tên quyền từ JComboBox
-
-        // Tạo một đối tượng User từ thông tin thu thập được
-        User user = new User(username, passwordHash, email);
-
-        // Gọi phương thức addUser của UserController để thêm người dùng mới
-        UserController userController = new UserController();
-
-        // Tìm roleID từ tên quyền
-        int roleID = userController.findRoleIDByRoleName(roleName);
-
-        // Thực hiện thêm người dùng và kiểm tra kết quả
-        String result = userController.addUser(user, employeeName, roleID);
-
-        // Kiểm tra xem thêm người dùng có thành công hay không và thông báo cho người dùng
-        switch (result) {
-            case "Success":
-                JOptionPane.showMessageDialog(this, "Thêm người dùng thành công!");
-                // Load lại bảng
-                showUserTable();
-                loadRoles();
-                loadEmployee();
-                showNhanVienTable();
-                // Xóa các trường nhập liệu sau khi thêm thành công
-                clearInputFields();
-                break;
-            case "Username already exists.":
-                JOptionPane.showMessageDialog(this, "Tên người dùng đã tồn tại!");
-                break;
-            case "Email already exists.":
-                JOptionPane.showMessageDialog(this, "Email đã tồn tại!");
-                break;
-            case "Employee ID already exists.":
-                JOptionPane.showMessageDialog(this, "Employee ID đã tồn tại!");
-                break;
-            default:
-                JOptionPane.showMessageDialog(this, "Thêm người dùng thất bại!");
-                break;
-        }
-    }//GEN-LAST:event_btnThem1ActionPerformed
+        FormDangNhap loginForm = new FormDangNhap(); // Assuming LoginForm is your login screen
+        loginForm.setVisible(true);
+        this.dispose(); // Close the current window
+    }//GEN-LAST:event_btnDangXuatActionPerformed
 
     private void clearInputFields() {
         // Clear the text fields and reset combo boxes after successful addition
@@ -918,117 +1118,6 @@ public class FormNhanSu extends javax.swing.JFrame {
         tbUserID.setText("");
         Role.setSelectedIndex(0); // Assuming the first item is a default or empty option
     }
-
-    private void tbUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbUserNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbUserNameActionPerformed
-
-    private void EmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmployeeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EmployeeActionPerformed
-
-    private void RoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RoleActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_RoleActionPerformed
-
-    private void tbPasswordHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbPasswordHashActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbPasswordHashActionPerformed
-
-    private void tbEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbEmailActionPerformed
-
-    private void tbUserIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbUserIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbUserIDActionPerformed
-
-    private void TableUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableUserMouseClicked
-        int selectedRow = TableUser.getSelectedRow();
-
-        if (selectedRow != -1) {
-            int userID = (int) TableUser.getValueAt(selectedRow, 0);
-            String username = (String) TableUser.getValueAt(selectedRow, 1);
-            String passwordHash = (String) TableUser.getValueAt(selectedRow, 2);
-            String email = (String) TableUser.getValueAt(selectedRow, 3);
-
-            tbUserID.setText(String.valueOf(userID));
-            tbUserName.setText(username);
-            tbPasswordHash.setText(passwordHash);
-            tbEmail.setText(email);
-
-            Role role = userController.findRoleByUserId(userID);
-            if (role != null) {
-                selectRole(role.getRoleName());
-            }
-
-            // Fetch and select the employee associated with the user
-            String fullName = userController.findEmployeeByUserId(userID);
-            if (fullName != null) {
-                selectEmployee(fullName);
-            } else {
-                Employee.setSelectedItem(null); // Clear selection if employee is not found
-            }
-
-        }
-    }//GEN-LAST:event_TableUserMouseClicked
-
-    private void btnXoa1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoa1ActionPerformed
-        // TODO add your handling code here:
-        int selectedRow = TableUser.getSelectedRow();
-        if (selectedRow != -1) { // Ensure that a row is selected
-            int userID = (int) TableUser.getValueAt(selectedRow, 0); // Assuming the first column contains userID
-            UserController userController = new UserController();
-            boolean success = userController.deleteUser(userID);
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Xóa người dùng thành công!");
-                // Load lại bảng người dùng sau khi xóa
-                showUserTable();
-                loadRoles();
-                loadEmployee();
-                showNhanVienTable();
-            } else {
-                JOptionPane.showMessageDialog(this, "Xóa người dùng thất bại!");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một người dùng để xóa!");
-        }
-    }//GEN-LAST:event_btnXoa1ActionPerformed
-
-    private void btnSua1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSua1ActionPerformed
-        // TODO add your handling code here:
-         // Lấy thông tin từ các trường dữ liệu trên giao diện
-        String username = tbUserName.getText();
-        String passwordHash = tbPasswordHash.getText();
-        String email = tbEmail.getText();
-        String employeeName = (String) Employee.getSelectedItem(); // Lấy tên nhân viên từ JComboBox
-        String roleName = (String) Role.getSelectedItem(); // Lấy tên quyền từ JComboBox
-
-        // Tạo một đối tượng User từ thông tin thu thập được
-        User user = new User(username, passwordHash, email);
-
-        // Gọi phương thức updateUser của UserController để sửa thông tin người dùng
-        UserController userController = new UserController();
-
-        // Tìm roleID từ tên quyền
-        int roleID = userController.findRoleIDByRoleName(roleName);
-
-        // Thực hiện sửa thông tin người dùng và kiểm tra kết quả
-        boolean success = userController.updateUser(user, employeeName, roleID);
-
-        // Kiểm tra xem sửa thông tin người dùng có thành công hay không và thông báo cho người dùng
-        if (success) {
-            JOptionPane.showMessageDialog(this, "Sửa thông tin người dùng thành công!");
-            // Cập nhật lại bảng hiển thị thông tin người dùng
-            showUserTable();
-            loadRoles();
-            loadEmployee();
-            showNhanVienTable();
-        } else {
-            JOptionPane.showMessageDialog(this, "Sửa thông tin người dùng thất bại!");
-        }
-    }//GEN-LAST:event_btnSua1ActionPerformed
 
     private void selectRole(String roleName) {
         for (int i = 0; i < Role.getItemCount(); i++) {
@@ -1091,6 +1180,7 @@ public class FormNhanSu extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> Role;
     private javax.swing.JTable TableQuanLyNhanVien;
     private javax.swing.JTable TableUser;
+    private javax.swing.JButton btnDangXuat;
     private javax.swing.JButton btnLamRong;
     private javax.swing.JButton btnLamRong1;
     private javax.swing.JButton btnSua;
