@@ -3,21 +3,21 @@ Chương trình bán hàng siêu thị
 
 JDK 21
 
+
+
 ### Day 1 2024-05-24
-```
-2024-05-24
+
 đọc theo sơ đồ này 
 ![image](https://github.com/hiepnx03/2024-05-Swing-Mart/assets/71397941/a0c61855-25d7-4bab-90c1-b17cfa290ca5)
 và thiết kế database
 ![image](https://github.com/hiepnx03/2024-05-Swing-Mart/assets/71397941/8c0499a9-62e8-408c-8cd8-1522518762ef)
-
+```
 Làm giao diện Login
 CHỨC NĂNG ĐĂNG NHẬP
 chọn quyền đăng nhập
 đăng nhập có lưu phiên đăng nhập (UserID từ đó có thể lấy ra EmployeeID)
 ấn phím Enter để đăng nhập
 ấn phím ESC để hiển thị hộp thoại thoát
-
 
 Làm giao diện nhân sự 
 CHỨC NĂNG NHÂN SỰ
@@ -59,8 +59,6 @@ hiển thị doanh thu của siêu thị
 hiển thị doanh thu siêu thị theo năm hiện tại
 hiển thị doanh thu siêu thị theo tháng hiện tại
 hiển thị doanh thu siêu thị theo ngày hiện tại
-
+```
 vẽ lại sơ đồ
 ![image](https://github.com/hiepnx03/2024-05-Swing-Mart/assets/71397941/0f4d4d86-62c2-427c-9ffc-7f341210fc36)
-```
-
