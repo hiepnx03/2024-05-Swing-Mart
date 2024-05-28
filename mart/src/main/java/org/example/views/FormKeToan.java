@@ -7,10 +7,13 @@ package org.example.views;
 import org.example.connect.MyConnection;
 import org.example.controllers.SalaryReportController;
 import org.example.controllers.SalesReceiptController;
+import org.example.controllers.UserController;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,19 +27,63 @@ import java.util.List;
 public class FormKeToan extends javax.swing.JFrame {
     private DefaultTableModel tableModel;
     private SalaryReportController salaryReportController;
+    private int loggedInUserID;
+    private int employeeID; // Thêm biến để lưu trữ EmployeeID
     /**
      * Creates new form FormKeToan
      */
-    public FormKeToan() {
+    public FormKeToan(int loggedInUserID) {
+        this.loggedInUserID = loggedInUserID;
+        UserController userController = new UserController();
+        employeeID = userController.getEmployeeIDByUserID(loggedInUserID);
         initComponents();
         showBaoCaoLuong();
         showBaoCaoDoanhThu();
-    }
+        addEscapeKeyBinding();
+        System.out.println("Đang Quản Lý kế toán với UserID: " + loggedInUserID); // In giá trị loggedInUserID
 
+    }
+    private void addEscapeKeyBinding() {
+        String escapeAction = "escapeAction";
+        KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
+
+        Action escapeActionHandler = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object[] options = {"Đăng xuất", "Thoát", "Không"};
+                int response = JOptionPane.showOptionDialog(
+                        FormKeToan.this,
+                        "Bạn có muốn đăng xuất hay thoát chương trình?",
+                        "Xác nhận",
+                        JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]
+                );
+
+                if (response == JOptionPane.YES_OPTION) {
+                    // Xử lý đăng xuất
+                    System.out.println("Bộ phận kế toán đã đăng xuất");
+                    btnDangXuatActionPerformed(null);
+                } else if (response == JOptionPane.NO_OPTION) {
+                    System.out.println("Đã thoát chương trình");
+                    // Thoát chương trình
+                    System.exit(0);
+                }else if (response == JOptionPane.CANCEL_OPTION) {
+                    System.out.println("Không có gì");
+                }
+            }
+        };
+
+        JRootPane rootPane = this.getRootPane();
+        rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, escapeAction);
+        rootPane.getActionMap().put(escapeAction, escapeActionHandler);
+    }
     private void showBaoCaoLuong() {
          salaryReportController = new SalaryReportController();
         tableModel = salaryReportController.getAllSalaryReport();
-        TableBaoCaoLuong.setModel(tableModel); // Sửa đổi ở đây
+//        TableBaoCaoLuong.setModel(tableModel); // Sửa đổi ở đây
     }
 
     private void showBaoCaoDoanhThu() {
@@ -57,9 +104,6 @@ public class FormKeToan extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         Main = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        TableBaoCaoLuong = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         TableBaoCaoDoanhThu = new javax.swing.JTable();
@@ -73,38 +117,8 @@ public class FormKeToan extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel1.setText("Kế Toán");
-
-        TableBaoCaoLuong.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane1.setViewportView(TableBaoCaoLuong);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        Main.addTab("Báo cáo lương", jPanel2);
 
         TableBaoCaoDoanhThu.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         TableBaoCaoDoanhThu.setModel(new javax.swing.table.DefaultTableModel(
@@ -174,20 +188,18 @@ public class FormKeToan extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnSapXepTheoGia)
-                        .addGap(0, 755, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnSapXepTheoSoLuongDaBan)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnXoa, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSapXepTheoTenSanPham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSapXepTheoGia, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSapXepTheoSoLuongDaBan, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(121, 121, 121)
-                        .addComponent(ComboBoxTongDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lbDoanhThu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(ComboBoxTongDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(lbDoanhThu, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE))))
                 .addContainerGap())
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(btnSapXepTheoTenSanPham)
-                .addGap(126, 126, 126)
-                .addComponent(btnXoa)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,15 +209,17 @@ public class FormKeToan extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSapXepTheoSoLuongDaBan)
-                    .addComponent(ComboBoxTongDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ComboBoxTongDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(btnSapXepTheoGia)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSapXepTheoTenSanPham))
                     .addComponent(lbDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnSapXepTheoGia)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSapXepTheoTenSanPham)
-                    .addComponent(btnXoa))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addComponent(btnXoa)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         Main.addTab("Báo cáo doanh thu", jPanel3);
@@ -227,9 +241,9 @@ public class FormKeToan extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnDangXuat))
                     .addComponent(Main))
                 .addContainerGap())
@@ -237,14 +251,11 @@ public class FormKeToan extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(32, 32, 32))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnDangXuat)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnDangXuat)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Main)
                 .addContainerGap())
         );
@@ -548,6 +559,24 @@ public class FormKeToan extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        final int[] loggedInUserID = {0}; // Khởi tạo với một giá trị mặc định
+
+        // Thử lấy ID của người dùng đã đăng nhập từ FormDangNhap
+        try {
+            FormDangNhap form = new FormDangNhap();
+            loggedInUserID[0] = form.getLoggedInUserID(); // Gọi phương thức không tĩnh trên một thể hiện
+        } catch (Exception e) {
+            // Xử lý trường hợp người dùng chưa đăng nhập
+            System.out.println("Người dùng chưa đăng nhập. Vui lòng đăng nhập trước.");
+            // Có thể chuyển hướng người dùng đến form đăng nhập hoặc xử lý theo logic của ứng dụng
+            return; // Kết thúc chương trình hoặc thực hiện bất kỳ hành động cần thiết khác
+        }
+
+        // Kiểm tra giá trị của loggedInUserID trước khi sử dụng
+        if (loggedInUserID[0] == 0) {
+            System.out.println("Người dùng chưa đăng nhập. Vui lòng đăng nhập trước.");
+            return;
+        }
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -574,7 +603,8 @@ public class FormKeToan extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FormKeToan().setVisible(true);
+                new FormKeToan(loggedInUserID[0]).setVisible(true);
+                System.out.println(loggedInUserID[0]);
             }
         });
     }
@@ -583,7 +613,6 @@ public class FormKeToan extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> ComboBoxTongDoanhThu;
     private javax.swing.JTabbedPane Main;
     private javax.swing.JTable TableBaoCaoDoanhThu;
-    private javax.swing.JTable TableBaoCaoLuong;
     private javax.swing.JButton btnDangXuat;
     private javax.swing.JButton btnSapXepTheoGia;
     private javax.swing.JButton btnSapXepTheoSoLuongDaBan;
@@ -591,9 +620,7 @@ public class FormKeToan extends javax.swing.JFrame {
     private javax.swing.JButton btnXoa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbDoanhThu;
     // End of variables declaration//GEN-END:variables

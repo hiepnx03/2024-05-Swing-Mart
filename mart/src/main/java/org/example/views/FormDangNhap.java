@@ -286,7 +286,7 @@ public class FormDangNhap extends javax.swing.JFrame {
                     System.out.println("Chức Vụ: quản lý hàng");
                     break;
                 case "kế toán":
-                    FormKeToan formKeToan = new FormKeToan();
+                    FormKeToan formKeToan = new FormKeToan(userID);
                     formKeToan.setVisible(true);
                     System.out.println("Chức Vụ: kế toán");
                     break;

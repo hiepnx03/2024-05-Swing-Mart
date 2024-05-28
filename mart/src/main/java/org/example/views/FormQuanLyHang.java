@@ -838,6 +838,7 @@ public class FormQuanLyHang extends javax.swing.JFrame {
         if (success) {
             JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thành công!");
             showSanPham();
+            showNhaCungCap();
             loadSupplier();
         } else {
             JOptionPane.showMessageDialog(this, "Thêm nhà cung cấp thất bại!");

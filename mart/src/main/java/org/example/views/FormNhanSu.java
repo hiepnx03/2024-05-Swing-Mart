@@ -30,6 +30,7 @@ public class FormNhanSu extends javax.swing.JFrame {
     private DefaultTableModel tableModel;
     private UserController userController;
 
+
     public FormNhanSu() {
         initComponents(); // Initialize components first
         showNhanVienTable(); // Then populate the table
@@ -154,9 +155,10 @@ public class FormNhanSu extends javax.swing.JFrame {
         tbContactInfo = new javax.swing.JTextField();
         tbHireDate = new javax.swing.JTextField();
         tbDateOfBirth = new javax.swing.JTextField();
-        btnSua = new javax.swing.JButton();
-        btnXoa = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         btnLamRong = new javax.swing.JButton();
+        btnXoa = new javax.swing.JButton();
+        btnSua = new javax.swing.JButton();
         btnThem = new javax.swing.JButton();
         jPquanlytaikhoan = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -179,7 +181,6 @@ public class FormNhanSu extends javax.swing.JFrame {
         btnLamRong1 = new javax.swing.JButton();
         btnThem1 = new javax.swing.JButton();
         btnXoa1 = new javax.swing.JButton();
-        jPchamcong = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnDangXuat = new javax.swing.JButton();
 
@@ -280,14 +281,14 @@ public class FormNhanSu extends javax.swing.JFrame {
             }
         });
 
-        btnSua.setBackground(new java.awt.Color(108, 117, 125));
-        btnSua.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        btnSua.setForeground(new java.awt.Color(255, 255, 255));
-        btnSua.setText("Sửa");
-        btnSua.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnSua.addActionListener(new java.awt.event.ActionListener() {
+        btnLamRong.setBackground(new java.awt.Color(0, 204, 204));
+        btnLamRong.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnLamRong.setForeground(new java.awt.Color(255, 255, 255));
+        btnLamRong.setText("Làm Rỗng");
+        btnLamRong.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnLamRong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSuaActionPerformed(evt);
+                btnLamRongActionPerformed(evt);
             }
         });
 
@@ -302,14 +303,14 @@ public class FormNhanSu extends javax.swing.JFrame {
             }
         });
 
-        btnLamRong.setBackground(new java.awt.Color(0, 204, 204));
-        btnLamRong.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        btnLamRong.setForeground(new java.awt.Color(255, 255, 255));
-        btnLamRong.setText("Làm Rỗng");
-        btnLamRong.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnLamRong.addActionListener(new java.awt.event.ActionListener() {
+        btnSua.setBackground(new java.awt.Color(108, 117, 125));
+        btnSua.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        btnSua.setForeground(new java.awt.Color(255, 255, 255));
+        btnSua.setText("Sửa");
+        btnSua.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLamRongActionPerformed(evt);
+                btnSuaActionPerformed(evt);
             }
         });
 
@@ -323,6 +324,35 @@ public class FormNhanSu extends javax.swing.JFrame {
                 btnThemActionPerformed(evt);
             }
         });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(93, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnXoa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnThem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnSua, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLamRong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSua, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnThem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(30, 30, 30)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLamRong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnXoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPquanlynhanvienLayout = new javax.swing.GroupLayout(jPquanlynhanvien);
         jPquanlynhanvien.setLayout(jPquanlynhanvienLayout);
@@ -362,20 +392,13 @@ public class FormNhanSu extends javax.swing.JFrame {
                                     .addComponent(jLabel7)
                                     .addComponent(jLabel9))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPquanlynhanvienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPquanlynhanvienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(tbContactInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tbHireDate, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tbSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPquanlynhanvienLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnLamRong)
-                        .addGap(213, 213, 213)))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPquanlynhanvienLayout.setVerticalGroup(
@@ -421,12 +444,9 @@ public class FormNhanSu extends javax.swing.JFrame {
                                 .addComponent(tbHireDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tbSalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPquanlynhanvienLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSua, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
-                    .addComponent(btnThem, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnXoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnLamRong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jtPmain.addTab("Quản Lý Nhân Viên", jPquanlynhanvien);
@@ -622,7 +642,7 @@ public class FormNhanSu extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel15)
                             .addComponent(Role, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -666,19 +686,6 @@ public class FormNhanSu extends javax.swing.JFrame {
         );
 
         jtPmain.addTab("Quản Lý Tài Khoản", jPquanlytaikhoan);
-
-        javax.swing.GroupLayout jPchamcongLayout = new javax.swing.GroupLayout(jPchamcong);
-        jPchamcong.setLayout(jPchamcongLayout);
-        jPchamcongLayout.setHorizontalGroup(
-            jPchamcongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 871, Short.MAX_VALUE)
-        );
-        jPchamcongLayout.setVerticalGroup(
-            jPchamcongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 639, Short.MAX_VALUE)
-        );
-
-        jtPmain.addTab("Chấm Công", jPchamcong);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1170,6 +1177,7 @@ public class FormNhanSu extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -1232,7 +1240,7 @@ public class FormNhanSu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPchamcong;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPmain;
     private javax.swing.JPanel jPquanlynhanvien;
     private javax.swing.JPanel jPquanlytaikhoan;
