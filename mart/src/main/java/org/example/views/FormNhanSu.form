@@ -797,6 +797,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="L&#xe0;m R&#x1ed7;ng"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLamRong1ActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="btnThem1">
                           <Properties>

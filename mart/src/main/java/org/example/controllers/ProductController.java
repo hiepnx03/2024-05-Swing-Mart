@@ -212,24 +212,89 @@ public class ProductController extends Component {
         }
     }
 
+    public boolean suaThongTinPhieuBanHang(int salesReceiptID, SalesReceiptDetail salesReceiptDetail, String customerName, String paymentMethod, int userID) {
+        String updateSalesReceiptSQL = "UPDATE SalesReceipts SET CustomerName = ?, PaymentMethod = ?, UpdatedBy = ?, UpdatedAt = ? WHERE SalesReceiptID = ?";
+        String updateSalesReceiptDetailSQL = "UPDATE SalesReceiptDetails SET ProductID = ?, Quantity = ?, UnitPrice = ?, TotalPrice = ?, UpdatedBy = ?, UpdatedAt = ? WHERE SalesReceiptID = ?";
 
-    private int getInsertedSupplierID() throws SQLException {
-        // Lấy ID của nhà cung cấp vừa được thêm vào
-        String selectLastSupplierIDQuery = "SELECT LAST_INSERT_ID()";
-        PreparedStatement selectLastSupplierIDStmt = connection.prepareStatement(selectLastSupplierIDQuery);
-        ResultSet resultSet = selectLastSupplierIDStmt.executeQuery();
-        resultSet.next();
-        return resultSet.getInt(1);
+        try (Connection conn = MyConnection.getConnection();
+             PreparedStatement updateSalesReceiptStmt = conn.prepareStatement(updateSalesReceiptSQL);
+             PreparedStatement updateSalesReceiptDetailStmt = conn.prepareStatement(updateSalesReceiptDetailSQL)) {
+
+            // Thực hiện giao dịch trong một transaction
+            conn.setAutoCommit(false);
+
+            // Cập nhật thông tin phiếu bán hàng trong bảng SalesReceipts
+            updateSalesReceiptStmt.setString(1, customerName); // Sử dụng tên khách hàng từ tham số
+            updateSalesReceiptStmt.setString(2, paymentMethod); // Sử dụng phương thức thanh toán từ tham số
+            updateSalesReceiptStmt.setInt(3, userID);
+            updateSalesReceiptStmt.setTimestamp(4, new Timestamp(System.currentTimeMillis())); // Thời gian cập nhật hiện tại
+            updateSalesReceiptStmt.setInt(5, salesReceiptID);
+            updateSalesReceiptStmt.executeUpdate();
+
+            // Cập nhật thông tin chi tiết phiếu bán hàng trong bảng SalesReceiptDetails
+            updateSalesReceiptDetailStmt.setInt(1, salesReceiptDetail.getProductID());
+            updateSalesReceiptDetailStmt.setInt(2, salesReceiptDetail.getQuantity());
+            updateSalesReceiptDetailStmt.setBigDecimal(3, BigDecimal.valueOf(salesReceiptDetail.getUnitPrice()));
+            updateSalesReceiptDetailStmt.setBigDecimal(4, BigDecimal.valueOf(salesReceiptDetail.getTotalPrice()));
+            updateSalesReceiptDetailStmt.setInt(5, userID);
+            updateSalesReceiptDetailStmt.setTimestamp(6, new Timestamp(System.currentTimeMillis())); // Thời gian cập nhật hiện tại
+            updateSalesReceiptDetailStmt.setInt(7, salesReceiptID);
+            updateSalesReceiptDetailStmt.executeUpdate();
+
+            // Commit transaction
+            conn.commit();
+
+            return true; // Giao dịch thành công
+
+        } catch (SQLException e) {
+            // Rollback transaction nếu có lỗi
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            e.printStackTrace();
+            return false; // Giao dịch không thành công
+        }
+    }
+    public boolean xoaPhieuBanHang(int salesReceiptID) {
+        String deleteSalesReceiptDetailSQL = "DELETE FROM SalesReceiptDetails WHERE SalesReceiptID = ?";
+        String deleteSalesReceiptSQL = "DELETE FROM SalesReceipts WHERE SalesReceiptID = ?";
+
+        try (Connection conn = MyConnection.getConnection();
+             PreparedStatement deleteSalesReceiptDetailStmt = conn.prepareStatement(deleteSalesReceiptDetailSQL);
+             PreparedStatement deleteSalesReceiptStmt = conn.prepareStatement(deleteSalesReceiptSQL)) {
+
+            // Thực hiện giao dịch trong một transaction
+            conn.setAutoCommit(false);
+
+            // Xóa chi tiết phiếu bán hàng trong bảng SalesReceiptDetails
+            deleteSalesReceiptDetailStmt.setInt(1, salesReceiptID);
+            deleteSalesReceiptDetailStmt.executeUpdate();
+
+            // Xóa phiếu bán hàng trong bảng SalesReceipts
+            deleteSalesReceiptStmt.setInt(1, salesReceiptID);
+            deleteSalesReceiptStmt.executeUpdate();
+
+            // Commit transaction
+            conn.commit();
+
+            return true; // Giao dịch thành công
+
+        } catch (SQLException e) {
+            // Rollback transaction nếu có lỗi
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            e.printStackTrace();
+            return false; // Giao dịch không thành công
+        }
     }
 
-    private int getInsertedProductID() throws SQLException {
-        // Lấy ID của sản phẩm vừa được thêm vào
-        String selectLastProductIDQuery = "SELECT LAST_INSERT_ID()";
-        PreparedStatement selectLastProductIDStmt = connection.prepareStatement(selectLastProductIDQuery);
-        ResultSet resultSet = selectLastProductIDStmt.executeQuery();
-        resultSet.next();
-        return resultSet.getInt(1);
-    }
+
+
 
     public boolean updateProduct(Product product, ProductImage productImage, int supplierID, int userID) {
         String updateProductQuery = "UPDATE Products SET ProductName = ?, Category = ?, StockQuantity = ?, UnitPrice = ?, SupplierID = ?, UpdatedBy = ?, UpdatedAt = ? WHERE ProductID = ?";

@@ -541,6 +541,11 @@ public class FormNhanSu extends javax.swing.JFrame {
         btnLamRong1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         btnLamRong1.setForeground(new java.awt.Color(255, 255, 255));
         btnLamRong1.setText("Làm Rỗng");
+        btnLamRong1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLamRong1ActionPerformed(evt);
+            }
+        });
 
         btnThem1.setBackground(new java.awt.Color(108, 117, 125));
         btnThem1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
@@ -1142,6 +1147,15 @@ public class FormNhanSu extends javax.swing.JFrame {
         loginForm.setVisible(true);
         this.dispose(); // Close the current window
     }//GEN-LAST:event_btnDangXuatActionPerformed
+
+    private void btnLamRong1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamRong1ActionPerformed
+        // TODO add your handling code here:
+        tbUserName.setText("");
+        tbPasswordHash.setText("");
+        tbEmail.setText("");
+        tbUserID.setText("");
+        Role.setSelectedIndex(0); // Assuming the first item is a default or empty option
+    }//GEN-LAST:event_btnLamRong1ActionPerformed
 
     private void clearInputFields() {
         // Clear the text fields and reset combo boxes after successful addition

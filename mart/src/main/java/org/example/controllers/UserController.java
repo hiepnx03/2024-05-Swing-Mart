@@ -22,6 +22,8 @@ public class UserController {
     private int loggedInUserID = -1; // Default value indicating no user is logged in
     private Map<Integer, Integer> sessionUserMap = new HashMap<>(); // Map to store user IDs in session
 
+
+    // lưu ID người đăng nhập
     public int getUserID(String username) {
         int userID = -1; // Default value if user ID is not found
 
@@ -48,6 +50,8 @@ public class UserController {
         sessionUserMap.put(userID, userID);
     }
 
+
+    // 1 Đăng nhập
     public boolean loginWithRole(String username, String password, String roleName) {
         String query = "SELECT u.*, r.* FROM users u " +
                 "INNER JOIN userroles ur ON u.userID = ur.userID " +
