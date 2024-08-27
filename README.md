@@ -65,4 +65,4 @@ vẽ lại sơ đồ
 ![image](https://github.com/hiepnx03/2024-05-Swing-Mart/assets/71397941/0f4d4d86-62c2-427c-9ffc-7f341210fc36)
 
 
-# dự án tôi làm gấp cho bạn code 4 ngày , làm báo cáo 5 ngày 
+# dự án tôi làm gấp cho bạn tôi. code và báo cáo làm hơn 1 tuần
