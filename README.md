@@ -5,13 +5,12 @@ JDK 21
 
 
 
-### Ngày 1 2024-05-24
+### 2024-05-24
 
 đọc theo sơ đồ này 
 ![image](https://github.com/hiepnx03/2024-05-Swing-Mart/assets/71397941/a0c61855-25d7-4bab-90c1-b17cfa290ca5)
 và thiết kế database
 ![image](https://github.com/hiepnx03/2024-05-Swing-Mart/assets/71397941/8c0499a9-62e8-408c-8cd8-1522518762ef)
-nhìn User của tôi nối như cái CPU =))
 ```
 Làm giao diện Login
 CHỨC NĂNG ĐĂNG NHẬP
@@ -25,7 +24,7 @@ CHỨC NĂNG NHÂN SỰ
 chức năng thêm sửa xóa nhân viên (Employee)
 chức năng thêm sửa xóa tài khoản (User)(có combobox chọn quyền)
 ```
-# Ngày 2 2024-05-25
+# 2024-05-25
 ```
 Làm giao diện quản lý hàng
 CHỨC NĂNG QUẢN LÝ HÀNG
@@ -41,7 +40,7 @@ xóa nhà cung cấp
 Làm giao diện quản lý giao dịch (Người này làm ở máy bán hàng và chọn sản phẩm để bán cho khách hàng)
 ```
 
-# Ngày 3 2024-05-26
+# 2024-05-26
 ```
 Tiếp tục làm giao dịch
 
@@ -64,5 +63,3 @@ hiển thị doanh thu siêu thị theo ngày hiện tại
 vẽ lại sơ đồ
 ![image](https://github.com/hiepnx03/2024-05-Swing-Mart/assets/71397941/0f4d4d86-62c2-427c-9ffc-7f341210fc36)
 
-
-# dự án tôi làm gấp cho bạn tôi. code và báo cáo làm hơn 1 tuần
