@@ -5,7 +5,7 @@ JDK 21
 
 
 
-### 2024-05-24
+###
 
 đọc theo sơ đồ này 
 ![image](https://github.com/hiepnx03/2024-05-Swing-Mart/assets/71397941/a0c61855-25d7-4bab-90c1-b17cfa290ca5)
@@ -24,7 +24,7 @@ CHỨC NĂNG NHÂN SỰ
 chức năng thêm sửa xóa nhân viên (Employee)
 chức năng thêm sửa xóa tài khoản (User)(có combobox chọn quyền)
 ```
-# 2024-05-25
+
 ```
 Làm giao diện quản lý hàng
 CHỨC NĂNG QUẢN LÝ HÀNG
@@ -40,7 +40,7 @@ xóa nhà cung cấp
 Làm giao diện quản lý giao dịch (Người này làm ở máy bán hàng và chọn sản phẩm để bán cho khách hàng)
 ```
 
-# 2024-05-26
+
 ```
 Tiếp tục làm giao dịch
 
