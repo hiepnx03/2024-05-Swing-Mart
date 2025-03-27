@@ -6,6 +6,7 @@ JDK 21
 Demo có video: https://hiepnx03.github.io/profile/project-detail/2024-05-Swing-Mart/2024-05-JavaSwing-Mart.html
 
 ###
+```
 Quản lý nhân sự
 USERNAME:	nhansu
 PASSWORD: 	nhansu
@@ -18,7 +19,7 @@ PASSWORD: 	giaodich
 Quản lý thống kê
 USERNAME:	ketoan
 PASSWORD: 	ketoan
-
+```
 
 
 đọc theo sơ đồ này 
