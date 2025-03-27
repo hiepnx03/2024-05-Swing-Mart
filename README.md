@@ -6,6 +6,20 @@ JDK 21
 Demo có video: https://hiepnx03.github.io/profile/project-detail/2024-05-Swing-Mart/2024-05-JavaSwing-Mart.html
 
 ###
+Quản lý nhân sự
+USERNAME:	nhansu
+PASSWORD: 	nhansu
+Quản lý kho
+USERNAME:	kho
+PASSWORD: 	kho
+Quản lý giao dịch
+USERNAME:	giaodich
+PASSWORD: 	giaodich
+Quản lý thống kê
+USERNAME:	ketoan
+PASSWORD: 	ketoan
+
+
 
 đọc theo sơ đồ này 
 ![image](https://github.com/hiepnx03/2024-05-Swing-Mart/assets/71397941/a0c61855-25d7-4bab-90c1-b17cfa290ca5)
