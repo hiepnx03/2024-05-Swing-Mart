@@ -21,7 +21,7 @@
         <lombok.version>1.18.30</lombok.version>
         <spring-boot.version>3.2.0</spring-boot.version>
         <graphql-dgs-codegen.version>6.0.3</graphql-dgs-codegen.version>
-        <spring.version>6.1.15</spring.version>
+        <spring.version>6.1.20</spring.version>
         <spring-data-jpa.version>3.3.0</spring-data-jpa.version>
     </properties>
 
