@@ -3,8 +3,8 @@ package org.example.repositories.impl;
 import org.example.connect.MyConnection;
 import org.example.models.Supplier;
 import org.example.repositories.SupplierRepository;
-import org.example.util.RowMapper;
-import org.example.util.SupplierRowMapper;
+import org.example.mapper.RowMapper;
+import org.example.mapper.SupplierRowMapper;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;

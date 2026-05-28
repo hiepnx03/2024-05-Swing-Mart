@@ -5,6 +5,8 @@ import org.example.models.Employee;
 import org.example.models.Role;
 import org.example.models.User;
 import org.example.repositories.UserRepository;
+import org.example.mapper.RowMapper;
+import org.example.mapper.UserRowMapper;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
@@ -58,6 +60,8 @@ public class UserRepositoryImpl implements UserRepository {
         
     private static final String SQL_GET_EMPLOYEE_BY_ID_AND_USER_ID = "SELECT * FROM employees WHERE EmployeeID = ? AND CreatedBy = ?";
     private static final String SQL_GET_EMPLOYEE_ID_BY_USER_ID = "SELECT employeeID FROM users WHERE userID = ?";
+
+    private final RowMapper<User> userRowMapper = new UserRowMapper();
 
     @Override
     public int getUserID(String username) {

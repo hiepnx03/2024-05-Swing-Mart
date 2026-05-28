@@ -1,4 +1,4 @@
-package org.example.util;
+package org.example.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
