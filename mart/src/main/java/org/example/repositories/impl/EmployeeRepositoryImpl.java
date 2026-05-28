@@ -2,8 +2,9 @@ package org.example.repositories.impl;
 
 import org.example.connect.MyConnection;
 import org.example.models.Employee;
-import org.example.models.Role;
 import org.example.repositories.EmployeeRepository;
+import org.example.util.EmployeeRowMapper;
+import org.example.util.RowMapper;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
@@ -44,6 +45,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     private static final String SQL_GET_ALL_EMPLOYEES_SIMPLE = 
         "SELECT * FROM employees";
 
+    private final RowMapper<Employee> employeeRowMapper = new EmployeeRowMapper();
+
     @Override
     public List<Employee> getAllNhanVien() {
         List<Employee> employeeList = new ArrayList<>();
@@ -52,16 +55,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
-                Employee employee = new Employee();
-                employee.setEmployeeID(resultSet.getInt("employeeID"));
-                employee.setFirstName(resultSet.getString("firstName"));
-                employee.setLastName(resultSet.getString("lastName"));
-                employee.setPosition(resultSet.getString("position"));
-                employee.setDateOfBirth(resultSet.getDate("dateOfBirth"));
-                employee.setContactInfo(resultSet.getString("contactInfo"));
-                employee.setHireDate(resultSet.getDate("hireDate"));
-                employee.setSalary(resultSet.getDouble("salary"));
-                employeeList.add(employee);
+                employeeList.add(employeeRowMapper.mapRow(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -199,11 +193,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
              ResultSet resultSet = statement.executeQuery(SQL_GET_ALL_EMPLOYEES_SIMPLE)) {
 
             while (resultSet.next()) {
-                Employee employee = new Employee();
-                employee.setEmployeeID(resultSet.getInt("employeeID"));
-                employee.setFirstName(resultSet.getString("firstName"));
-                employee.setLastName(resultSet.getString("lastName"));
-                employees.add(employee);
+                employees.add(employeeRowMapper.mapRow(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();

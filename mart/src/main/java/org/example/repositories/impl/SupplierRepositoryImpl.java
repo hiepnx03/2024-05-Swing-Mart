@@ -3,6 +3,8 @@ package org.example.repositories.impl;
 import org.example.connect.MyConnection;
 import org.example.models.Supplier;
 import org.example.repositories.SupplierRepository;
+import org.example.util.RowMapper;
+import org.example.util.SupplierRowMapper;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
@@ -24,6 +26,8 @@ public class SupplierRepositoryImpl implements SupplierRepository {
     private static final String SQL_DELETE_PRODUCTS = "DELETE FROM Products WHERE SupplierID = ?";
     private static final String SQL_DELETE_SUPPLIER = "DELETE FROM Suppliers WHERE SupplierID = ?";
 
+    private final RowMapper<Supplier> supplierRowMapper = new SupplierRowMapper();
+
     @Override
     public Supplier getSupplierByName(String supplierName) {
         Supplier supplier = null;
@@ -32,16 +36,7 @@ public class SupplierRepositoryImpl implements SupplierRepository {
             statement.setString(1, supplierName);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    supplier = new Supplier();
-                    supplier.setSupplierID(resultSet.getInt("supplierID"));
-                    supplier.setSupplierName(resultSet.getString("supplierName"));
-                    supplier.setContactInfo(resultSet.getString("contactInfo"));
-                    supplier.setAddress(resultSet.getString("address"));
-                    supplier.setPhone(resultSet.getString("phone"));
-                    supplier.setEmail(resultSet.getString("email"));
-                    supplier.setCreatedBy(resultSet.getInt("createdBy"));
-                    supplier.setUpdatedBy(resultSet.getInt("updatedBy"));
-                    supplier.setUpdatedAt(resultSet.getDate("updatedAt"));
+                    supplier = supplierRowMapper.mapRow(resultSet);
                 }
             }
         } catch (SQLException e) {
